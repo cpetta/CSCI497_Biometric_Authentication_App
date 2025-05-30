@@ -1,0 +1,25 @@
+body {
+	background-image: url('../assets/background.png');
+	background-position: center;
+	background-repeat: no-repeat;
+	background-size: auto;
+	display: grid;
+	margin: 0;
+	min-height: 100vh;
+	min-width: 100vw;
+}
+
+main {
+	background: white;
+	border-radius: 10px;
+	margin-bottom: 10vh;
+	max-width: 80vw;
+	min-height: 50vh;
+	min-width: 80vw;
+	padding: 20px;
+	place-self: center;
+}
+
+h1 {
+	margin: 0;
+}
