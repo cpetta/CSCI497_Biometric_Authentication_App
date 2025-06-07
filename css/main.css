@@ -36,29 +36,13 @@ button {
 	min-height: 10mm;
 	padding: 12px 15px;
 	transition: all 0.25s ease;
+	background: #45b1ef;
 }
 
 button:hover,
 button:focus {
 	border-radius: 10px;
-}
-
-.welcome-login-btn {
-	background: #45b1ef;
-}
-
-.welcome-login-btn:hover,
-.welcome-login-btn:focus {
 	background: #23a5f0;
-}
-
-.welcome-create-account-btn {
-	background: #0a7ec1;
-}
-
-.welcome-create-account-btn:hover,
-.welcome-create-account-btn:focus {
-	background: #075786;
 }
 
 #app {
@@ -143,4 +127,45 @@ button:focus {
 		transform:translateY(25px);
 		pointer-events: none;
 	}
+}
+
+
+
+/*-----------------------*/
+/* Welcome page styles	 */
+/*-----------------------*/
+.welcome-login-btn {
+	/*background: #45b1ef;*/
+}
+
+.welcome-login-btn:hover,
+.welcome-login-btn:focus {
+	/*background: #23a5f0;*/
+}
+
+.welcome-create-account-btn {
+	background: #0a7ec1;
+}
+
+.welcome-create-account-btn:hover,
+.welcome-create-account-btn:focus {
+	background: #075786;
+}
+
+
+
+
+
+
+/*-----------------------*/
+/* Login page styles	 */
+/*-----------------------*/
+.login-view-video-start-btn {
+	
+}
+
+video {
+	height: 540px;
+	width: 960px;
+	background: black;
 }
