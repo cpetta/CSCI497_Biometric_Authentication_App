@@ -7,6 +7,7 @@ body {
 	margin: 0;
 	min-height: 100vh;
 	min-width: 100vw;
+	font-family: Arial, Helvetica, sans-serif;
 }
 
 main {
@@ -21,6 +22,43 @@ main {
 	min-width: 80vw;
 	padding: 20px;
 	place-self: center;
+}
+
+/*-----------------------*/
+/* Button Styles		 */
+/*-----------------------*/
+button {
+	border-radius: 7px;
+	border: none;
+	color:white;
+	cursor: pointer;
+	font-size: 12pt;
+	min-height: 10mm;
+	padding: 12px 15px;
+	transition: all 0.25s ease;
+}
+
+button:hover,
+button:focus {
+	border-radius: 10px;
+}
+
+.welcome-login-btn {
+	background: #45b1ef;
+}
+
+.welcome-login-btn:hover,
+.welcome-login-btn:focus {
+	background: #23a5f0;
+}
+
+.welcome-create-account-btn {
+	background: #0a7ec1;
+}
+
+.welcome-create-account-btn:hover,
+.welcome-create-account-btn:focus {
+	background: #075786;
 }
 
 #app {
