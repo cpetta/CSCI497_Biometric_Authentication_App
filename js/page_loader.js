@@ -17,18 +17,24 @@ export async function load_view(view_name) {
 	try {
 		await start_loading();
 		const request = await fetch(`/views/${view_name}.html`);
+		const request_js = await fetch(`/js/${view_name}.js`);
 		
-		if (!request.ok) {
+		if (!request.ok || !request_js.ok) {
 			throw new Error(`Response status: ${request.status}`);
 		}
 
 		const response = await request.text();
+		const response_js = await request_js.text();
 		
 		if(response) {
 			app.innerHTML = response;
 		}
-		else {
-			console.log('response', response);
+
+		if(response_js) {
+			const js_elm = document.createElement('script');
+			js_elm.type = 'module';
+			js_elm.innerHTML = response_js;
+			app.append(js_elm);
 		}
 	}
 	catch (error) {
@@ -48,8 +54,8 @@ async function end_loading() {
 }
 
 async function start_loading() {
-	app.classList.add('-hidden');
 	app.classList.remove('-show');
+	app.classList.add('-hidden');
 	await sleep(animation_duration);
 	loading_spinner.classList.remove('-hidden');
 	loading_spinner.classList.add('-show');
