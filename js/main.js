@@ -1,6 +1,6 @@
 "use-strict"
-//import { load_view } from './page_loader.js';
-import { load_view } from './js/page_loader.js';
+import { load_view } from './page_loader.js';
+//import { load_view } from './js/page_loader.js';
 // ---------------------------------
 // Selectors
 // ---------------------------------
