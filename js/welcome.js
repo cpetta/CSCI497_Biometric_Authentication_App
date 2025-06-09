@@ -1,6 +1,8 @@
-import { load_view } from './page_loader.js'
+"use-strict"
+//import { load_view } from './page_loader.js'
+import { load_view } from './js/page_loader.js'
 
-console.log('welcome.js')
+console.log('welcome.js');
 // ---------------------------------
 // Selectors
 // ---------------------------------
