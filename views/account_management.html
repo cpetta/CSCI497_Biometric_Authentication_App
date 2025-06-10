@@ -1,11 +1,12 @@
 <div id="manage-account-view">
 	<h1>Account Management</h1>
 	<div class="account-image-container">
-		<img class="profile-image" src="" alt="No Profile Image">
-		<button>
+		<video id="login-view-video-stream" class="video-stream">Video stream not available.</video>
+		<img class="profile-image video-image" src="" alt="No Profile Image">
+		<button class="take-picture-btn">
 			<img src="" alt="Take Picture" />
 		</button>
-		<button>
+		<button class="save-image-btn">
 			<img src="" alt="Save Image" />
 		</button>
 	</div>
@@ -23,11 +24,14 @@
 				take a new picture
 			</span>
 		</button>
-		<button id="manage-account-view-new-passkey-btn">
+		<button id="manage-account-view-new-passkey-btn" class="new-passkey-btn">
 			<img class="manage-account-view-new-passkey-btn-icon"/>
 			<span class="manage-account-view-new-passkey-btn-text">
 				register a new passkey
 			</span>
+		</button>
+		<button class="logout-btn">
+				Logout
 		</button>
 	</div>
 </div>

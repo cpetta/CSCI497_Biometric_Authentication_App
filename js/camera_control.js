@@ -46,18 +46,20 @@ export async function init() {
 		if (canvas && width && height) {
 			canvas.width = width;
 			canvas.height = height;
-			context.drawImage(video, 0, 0, width, height);
+			context?.drawImage(video, 0, 0, width, height);
 
 			const data = canvas.toDataURL("image/png");
 			image.setAttribute("src", data);
 		} else {
-			clearPhoto();
+			clear_picture();
 		}
 	}
 
 	function clear_picture() {
-		context.fillStyle = "#AAA";
-		context.fillRect(0, 0, canvas?.width, canvas?.height);
+		if(context) {
+			context.fillStyle = "#AAA";
+			context.fillRect(0, 0, canvas?.width, canvas?.height);
+		}
 
 		const data = canvas?.toDataURL("image/png");
 		image.setAttribute("src", data);
