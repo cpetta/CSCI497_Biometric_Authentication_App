@@ -15,12 +15,12 @@ export async function init() {
 	let width = 940;
 	let height = 0;
 	let streaming = false;
-	const context = canvas.getContext("2d");
+	const context = canvas?.getContext("2d");
 
 	// ---------------------------------
 	// Events
 	// ---------------------------------
-	video.addEventListener("canplay", handle_video_canplay, false);
+	video?.addEventListener("canplay", handle_video_canplay, false);
 	start_btn.addEventListener('click', start_camera, false);
 	picture_btn.addEventListener('click', take_picture, false);
 
@@ -43,7 +43,7 @@ export async function init() {
 	async function take_picture(event) {
 		event.preventDefault();
 		
-		if (width && height) {
+		if (canvas && width && height) {
 			canvas.width = width;
 			canvas.height = height;
 			context.drawImage(video, 0, 0, width, height);
@@ -57,9 +57,9 @@ export async function init() {
 
 	function clear_picture() {
 		context.fillStyle = "#AAA";
-		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.fillRect(0, 0, canvas?.width, canvas?.height);
 
-		const data = canvas.toDataURL("image/png");
+		const data = canvas?.toDataURL("image/png");
 		image.setAttribute("src", data);
 	}
 
@@ -74,8 +74,8 @@ export async function init() {
 
 			video.setAttribute("width", width);
 			video.setAttribute("height", height);
-			canvas.setAttribute("width", width);
-			canvas.setAttribute("height", height);
+			canvas?.setAttribute("width", width);
+			canvas?.setAttribute("height", height);
 			streaming = true;
 		}
 	}
