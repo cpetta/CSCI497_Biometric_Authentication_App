@@ -1,9 +1,13 @@
 <div id="login-view">
-	<link href="../css/login.css"/>
-	<video id="login-view-video-stream" class="video-stream">Video stream not available.</video>
-	<canvas id="login-view-video-canvas" class="video-canvas"></canvas>
-	<div class="output">
-		<img id="login-view-image-capture" class="image-capture" alt="Screen capture" />
+	<div class="camera-controls-container">
+		<video class="video-stream">Video stream not available.</video>
+		<img class="video-image -hidden" src="" alt="">
+		<button class="take-picture-btn -hidden">
+			<img src="" alt="Take Picture" />
+		</button>
+		<button class="save-image-btn -hidden">
+			<img src="" alt="Save Image" />
+		</button>
 	</div>
 	<div class="camera-controls-buttons-container">
 		<button id="login-view-back-btn" class="back-btn">
@@ -16,12 +20,6 @@
 			<img class="login-view-video-start-btn-icon"/>
 			<span class="login-view-video-start-btn-text">
 				Start Camera for Facial Recognition
-			</span>
-		</button>
-		<button id="login-view-picture-btn" class="take-picture-btn">
-			<img class="login-view-take-picture-btn-icon"/>
-			<span class="login-view-take-picture-btn-text">
-				Take Picture
 			</span>
 		</button>
 	</div>
