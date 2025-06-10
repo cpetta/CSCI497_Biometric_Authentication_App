@@ -3,11 +3,14 @@ export async function init() {
 	// ---------------------------------
 	// Selectors
 	// ---------------------------------
-	const video = document.querySelector('.video-stream');
-	const canvas = document.querySelector('.video-canvas');
-	const image = document.querySelector('.video-image');
-	const picture_btn = document.querySelector('.take-picture-btn');
+	const base = document.querySelector('.camera-controls-container');
+	const video = base.querySelector('.video-stream');
+	const canvas = base.querySelector('.video-canvas');
+	const image = base.querySelector('.video-image');
 	const start_btn = document.querySelector('.video-start-btn');
+	const picture_btn = base.querySelector('.take-picture-btn');
+	const save_btn = base.querySelector('.save-image-btn');
+
 
 	// ---------------------------------
 	// Init
@@ -34,6 +37,7 @@ export async function init() {
 				video.srcObject = stream;
 				video.play();
 			}
+			show_controls();
 		}
 		catch(error) {
 			console.error(`An error occurred: ${error}`);
@@ -80,5 +84,10 @@ export async function init() {
 			canvas?.setAttribute("height", height);
 			streaming = true;
 		}
+	}
+
+	function show_controls() {
+		picture_btn.classList.remove('-hidden');
+		save_btn.classList.remove('-hidden');
 	}
 }
