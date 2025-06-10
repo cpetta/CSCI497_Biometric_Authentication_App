@@ -55,6 +55,14 @@ button:focus {
 	animation: hide 500ms ease forwards;
 }
 
+@starting-style {
+	.-hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+
 .-show {
 	animation: fade-in-from-top 500ms ease forwards;
 }
@@ -130,6 +138,54 @@ button:focus {
 }
 
 
+/*-----------------------*/
+/* Camera Contorls		 */
+/*-----------------------*/
+.camera-controls-container {
+	display: grid;
+	grid-template-areas: "account-image";
+	place-content: center;
+	position: relative;
+	width: fit-content;
+}
+
+.video-stream,
+.video-image {
+	background: black;
+	color: white;
+	display: grid;
+	grid-area: account-image;
+	height: 300px;
+	place-content: center;
+	width: 300px;
+}
+
+.video-stream {
+	object-fit: cover;
+	z-index: 1;
+}
+
+.video-image {
+	background: black;
+	color: white;
+	display: grid;
+	height: 300px;
+	place-content: center;
+	width: 300px;
+	z-index: 1;
+}
+
+.take-picture-btn {
+	position: absolute;
+	left: 0;
+	z-index: 5;
+}
+
+.save-image-btn {
+	position: absolute;
+	right:0;
+	z-index: 5;
+}
 
 /*-----------------------*/
 /* Welcome page styles	 */
@@ -175,47 +231,3 @@ video {
 /*-----------------------*/
 /* Account Management	 */
 /*-----------------------*/
-.account-image-container {
-	display: grid;
-	grid-template-areas: "account-image";
-	place-content: center;
-	position: relative;
-	width: fit-content;
-}
-
-.video-stream,
-.profile-image {
-	background: black;
-	color: white;
-	display: grid;
-	grid-area: account-image;
-	height: 300px;
-	place-content: center;
-	width: 300px;
-}
-
-.video-stream {
-	z-index: 1;
-}
-
-.profile-image {
-	background: black;
-	color: white;
-	display: grid;
-	height: 300px;
-	place-content: center;
-	width: 300px;
-	z-index: 1;
-}
-
-.take-picture-btn {
-	position: absolute;
-	left: 0;
-	z-index: 5;
-}
-
-.save-image-btn {
-	position: absolute;
-	right:0;
-	z-index: 5;
-}
