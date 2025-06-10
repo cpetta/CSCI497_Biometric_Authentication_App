@@ -169,3 +169,18 @@ video {
 	width: 960px;
 	background: black;
 }
+
+
+
+/*-----------------------*/
+/* Account Management	 */
+/*-----------------------*/
+.profile-image {
+	background: black;
+	color: white;
+	display: grid;
+	height: 300px;
+	place-content: center;
+	text-align: center;
+	width: 300px;
+}
