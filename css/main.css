@@ -52,7 +52,11 @@ button:focus {
 }
 
 .-hidden {
-	animation: hide 500ms ease forwards;
+	animation: fade-out-and-down 500ms ease forwards;
+}
+
+.-show {
+	animation: fade-in-and-down 500ms ease forwards;
 }
 
 @starting-style {
@@ -62,9 +66,14 @@ button:focus {
 	}
 }
 
+@media (prefers-reduced-motion: reduce) {
+	.-hidden {
+		animation: fade-out 500ms ease forwards;
+	}
 
-.-show {
-	animation: fade-in-from-top 500ms ease forwards;
+	.-show {
+		animation: fade-in 500ms ease forwards;
+	}
 }
 
 /* ---------------------- */
@@ -103,6 +112,11 @@ button:focus {
 .loading-spinner div:nth-child(3) {
 	animation-delay: -0.15s;
 }
+
+
+/*-----------------------*/
+/* Animations			 */
+/*-----------------------*/
 @keyframes loading-spinner {
 	0% {
 	transform: rotate(0deg);
@@ -112,7 +126,7 @@ button:focus {
 	}
 }
 
-@keyframes fade-in-from-top {
+@keyframes fade-in-and-down {
 	0% {
 		opacity: 0;
 		transform:translateY(-25px);
@@ -124,7 +138,7 @@ button:focus {
 	}
 }
 
-@keyframes hide {
+@keyframes fade-out-and-down {
 	0% {
 		opacity: 1;
 		transform:translateY(0);
@@ -137,6 +151,25 @@ button:focus {
 	}
 }
 
+@keyframes fade-in {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes fade-out {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
 
 /*-----------------------*/
 /* Camera Contorls		 */
