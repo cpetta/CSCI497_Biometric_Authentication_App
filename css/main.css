@@ -51,6 +51,10 @@ button:focus {
 	grid-column: 1;
 }
 
+
+/* ------------------------------------ */
+/* Loading transition animations		*/
+/* ------------------------------------ */
 .-hidden {
 	animation: fade-out-and-down 500ms ease forwards;
 }
