@@ -187,9 +187,8 @@ button:focus {
 }
 
 .video-stream,
-.video-image {
-	background: black;
-	color: white;
+.video-image,
+.video-canvas {
 	display: grid;
 	grid-area: account-image;
 	height: 300px;
@@ -203,13 +202,16 @@ button:focus {
 }
 
 .video-image {
-	background: black;
-	color: white;
 	display: grid;
 	height: 300px;
 	place-content: center;
 	width: 300px;
 	z-index: 1;
+}
+
+.video-canvas {
+	object-fit: cover;
+	z-index: 2;
 }
 
 /*-----------------------*/
