@@ -7,6 +7,8 @@ export async function init() {
 	const video = base.querySelector('.video-stream');
 	const canvas = base.querySelector('.video-canvas');
 	const image = base.querySelector('.video-image');
+
+	const controls_container = base.querySelector('.camera-controls-buttons-container');
 	const start_btn = document.querySelector('.video-start-btn');
 	const picture_btn = base.querySelector('.take-picture-btn');
 	const save_btn = base.querySelector('.save-image-btn');
@@ -87,7 +89,6 @@ export async function init() {
 	}
 
 	function show_controls() {
-		picture_btn.classList.remove('-hidden');
-		save_btn.classList.remove('-hidden');
+		controls_container.classList.remove('-hidden');
 	}
 }

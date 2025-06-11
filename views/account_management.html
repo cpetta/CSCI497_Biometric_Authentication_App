@@ -3,15 +3,22 @@
 	<div class="camera-controls-container">
 		<video class="video-stream">Video stream not available.</video>
 		<img class="video-image -hidden" src="" alt="">
-		<button class="take-picture-btn -hidden">
-			<img class="take-picture-icon" src="../assets/camera.svg" alt="Take Picture" />
-		</button>
-		<button class="save-image-btn -hidden">
-			<img class="save-image-icon" src="../assets/floppy-disk-solid.svg" alt="Save Image" />
-		</button>
+		<canvas class="video-canvas"></canvas>
+		<div class="camera-controls-buttons-container -hidden">
+			<button class="take-picture-btn">
+				<img class="take-picture-icon" src="../assets/camera.svg" alt="Take Picture" />
+			</button>
+			<button class="save-image-btn">
+				<img class="save-image-icon" src="../assets/floppy-disk-solid.svg" alt="Save Image" />
+			</button>
+			<button class="end-video-btn">
+				<img class="end-video-icon" src="../assets/x-mark.svg" alt="Save Image" />
+			</button>
+		</div>
+		
 	</div>
 	<ul class="passkey-list"></ul>
-	<div class="camera-controls-buttons-container">
+	<div class="page-control-buttons">
 		<button id="manage-account-view-back-btn" class="back-btn">
 			<img class="back-btn-icon"/>
 			<span class="back-btn-text">

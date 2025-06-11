@@ -212,23 +212,49 @@ button:focus {
 	z-index: 1;
 }
 
-.take-picture-btn {
+/*-----------------------*/
+/* Camera Controls		 */
+/*-----------------------*/
+.camera-controls-buttons-container {
+	display: flex;
+	gap: 7px;
+	padding: 7px;
 	position: absolute;
-	left: 0;
+	right: 0;
 	z-index: 5;
 }
 
+.take-picture-btn,
+.save-image-btn,
+.end-video-btn {
+	display: grid;
+	padding: 7px 10px;
+	place-content: center;
+}
+
 .take-picture-icon,
-.save-image-icon {
+.save-image-icon,
+.end-video-icon {
 	height:20px;
 	width: 20px;
 	filter:invert(1);
 }
 
+.take-picture-btn {
+	
+}
+
 .save-image-btn {
-	position: absolute;
-	right:0;
-	z-index: 5;
+	
+}
+
+.end-video-btn {
+	background: #aa0000;
+}
+
+.end-video-btn:hover,
+.end-video-btn:focus {
+	background: #FF0000;
 }
 
 /*-----------------------*/
