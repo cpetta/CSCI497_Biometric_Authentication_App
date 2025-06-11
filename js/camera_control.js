@@ -12,6 +12,7 @@ export async function init() {
 	const start_btn = document.querySelector('.video-start-btn');
 	const picture_btn = base.querySelector('.take-picture-btn');
 	const save_btn = base.querySelector('.save-image-btn');
+	const clear_btn = base.querySelector('.end-video-btn');
 
 
 	// ---------------------------------
@@ -20,6 +21,7 @@ export async function init() {
 	let width = 940;
 	let height = 0;
 	let streaming = false;
+	let saved_image = false;
 	const context = canvas?.getContext("2d");
 
 	// ---------------------------------
@@ -28,6 +30,7 @@ export async function init() {
 	video?.addEventListener("canplay", handle_video_canplay, false);
 	start_btn.addEventListener('click', start_camera, false);
 	picture_btn.addEventListener('click', take_picture, false);
+	clear_btn.addEventListener('click', handle_clear_btn_click, false);
 
 	// ---------------------------------
 	// Functions
@@ -56,6 +59,7 @@ export async function init() {
 
 			const data = canvas.toDataURL("image/png");
 			image.setAttribute("src", data);
+			saved_image = true;
 		} else {
 			clear_picture();
 		}
@@ -63,8 +67,7 @@ export async function init() {
 
 	function clear_picture() {
 		if(context) {
-			context.fillStyle = "#AAA";
-			context.fillRect(0, 0, canvas?.width, canvas?.height);
+			context.clearRect(0, 0, canvas.width, canvas.height);
 		}
 
 		const data = canvas?.toDataURL("image/png");
@@ -90,5 +93,17 @@ export async function init() {
 
 	function show_controls() {
 		controls_container.classList.remove('-hidden');
+	}
+
+	function handle_clear_btn_click() {
+		if(saved_image) {
+			clear_picture();
+			saved_image = false;
+		}
+		else {
+			video.pause();
+			video.srcObject = null;
+			streaming = false;
+		}
 	}
 }
