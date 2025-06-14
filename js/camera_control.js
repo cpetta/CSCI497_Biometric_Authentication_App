@@ -36,7 +36,7 @@ export async function init() {
 	// Functions
 	// ---------------------------------
 	async function start_camera() {
-		image.classList.remove('-placeholder-image')
+		image.classList.remove('-placeholder')
 		image.src = '';
 		try {
 			if (!streaming) {
