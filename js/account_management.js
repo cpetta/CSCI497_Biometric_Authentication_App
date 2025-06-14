@@ -10,12 +10,14 @@ const base = document.getElementById('manage-account-view');
 const back_btn = base.querySelector('.back-btn');
 const logout_btn = base.querySelector('.logout-btn');
 const new_passkey_btn = base.querySelector('.new-passkey-btn');
-const save_image_btn = base.querySelector('.save-image-btn');
 const passkey_list = base.querySelector('.passkey-list');
 // ---------------------------------
 // init
 // ---------------------------------
-const camera = new CameraControl();
+const camera = new CameraControl({
+	onSaveCB: handle_save_image_btn_click,
+});
+
 get_passkey_list();
 // ---------------------------------
 // Events
@@ -23,7 +25,6 @@ get_passkey_list();
 back_btn.addEventListener('click', () => load_view('welcome'));
 logout_btn.addEventListener('click', handle_logout_btn_click);
 new_passkey_btn.addEventListener('click', handle_new_passkey_btn_click);
-save_image_btn.addEventListener('click', handle_save_image_btn_click);
 
 // ---------------------------------
 // Functions
@@ -49,7 +50,6 @@ async  function get_passkey_list() {
 	const debug_2 = create_passkey_list_item({name: 'Mini Yubikey'}); // Debug
 
 	passkey_list.append(debug_1, debug_2);
-
 }
 
 function create_passkey_list_item(data) {

@@ -22,6 +22,8 @@ export class CameraControl {
 	#saved_image = false;
 	#context = this.#canvas?.getContext("2d");
 
+	#onSaveCB;
+
 	get image() {
 		return this.#image.src;
 	}
@@ -29,11 +31,14 @@ export class CameraControl {
 	// ---------------------------------
 	// Events
 	// ---------------------------------
-	constructor() {
+	constructor(args = {}) {
+		this.#onSaveCB = args?.onSaveCB ?? function() {};
+
 		this.#video.addEventListener("canplay", this.handle_video_canplay.bind(this));
 		this.#start_btn.addEventListener('click', this.start_camera.bind(this), false);
 		this.#picture_btn.addEventListener('click', this.take_picture.bind(this), false);
 		this.#clear_btn.addEventListener('click', this.handle_clear_btn_click.bind(this), false);
+		this.#save_btn.addEventListener('click', this.handle_save.bind(this));
 	}
 
 	// ---------------------------------
@@ -100,6 +105,12 @@ export class CameraControl {
 			this.#video.pause();
 			this.#video.srcObject = null;
 			this.#streaming = false;
+		}
+	}
+
+	async handle_save() {
+		if(typeof this.#onSaveCB == 'function') {
+			this.#onSaveCB();
 		}
 	}
 }
