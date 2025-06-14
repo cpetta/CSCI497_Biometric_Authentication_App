@@ -17,6 +17,13 @@ const loading_spinner = document.getElementById('view-loading-spinner');
 
 export async function load_view(view_name) {
 	try {
+		const video = document.querySelector('video');
+		if(video) {
+			video.pause();
+			video.srcObject = null;
+		}
+		
+
 		await start_loading();
 		const request = await fetch(`views/${view_name}.html`);
 		const request_js = await fetch(`js/${view_name}.js`);
