@@ -18,7 +18,7 @@ export async function init() {
 	// ---------------------------------
 	// Init
 	// ---------------------------------
-	let width = 940;
+	let width = 775;
 	let height = 0;
 	let streaming = false;
 	let saved_image = false;
