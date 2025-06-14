@@ -1,110 +1,106 @@
-export async function init() {
+export class CameraControl {
 	"use-strict"
 	// ---------------------------------
 	// Selectors
 	// ---------------------------------
-	const base = document.querySelector('.camera-controls-container');
-	const video = base.querySelector('.video-stream');
-	const canvas = base.querySelector('.video-canvas');
-	const image = base.querySelector('.video-image');
+	#base = document.querySelector('.camera-controls-container');
+	#video = this.#base.querySelector('.video-stream');
+	#canvas = this.#base.querySelector('.video-canvas');
+	#image = this.#base.querySelector('.video-image');
 
-	const controls_container = base.querySelector('.camera-controls-buttons-container');
-	const start_btn = document.querySelector('.video-start-btn');
-	const picture_btn = base.querySelector('.take-picture-btn');
-	const save_btn = base.querySelector('.save-image-btn');
-	const clear_btn = base.querySelector('.end-video-btn');
-
+	#controls_container = this.#base.querySelector('.camera-controls-buttons-container');
+	#start_btn = document.querySelector('.video-start-btn');
+	#picture_btn = this.#base.querySelector('.take-picture-btn');
+	#save_btn = this.#base.querySelector('.save-image-btn');
+	#clear_btn = this.#base.querySelector('.end-video-btn');
 
 	// ---------------------------------
 	// Init
 	// ---------------------------------
-	let width = 775;
-	let height = 0;
-	let streaming = false;
-	let saved_image = false;
-	const context = canvas?.getContext("2d");
+	#width = 775;
+	#height = 0;
+	#streaming = false;
+	#saved_image = false;
+	#context = this.#canvas?.getContext("2d");
 
 	// ---------------------------------
 	// Events
 	// ---------------------------------
-	video?.addEventListener("canplay", handle_video_canplay, false);
-	start_btn.addEventListener('click', start_camera, false);
-	picture_btn.addEventListener('click', take_picture, false);
-	clear_btn.addEventListener('click', handle_clear_btn_click, false);
+	constructor() {
+		this.#video.addEventListener("canplay", this.handle_video_canplay.bind(this));
+		this.#start_btn.addEventListener('click', this.start_camera.bind(this), false);
+		this.#picture_btn.addEventListener('click', this.take_picture.bind(this), false);
+		this.#clear_btn.addEventListener('click', this.handle_clear_btn_click.bind(this), false);
+	}
 
 	// ---------------------------------
 	// Functions
 	// ---------------------------------
-	async function start_camera() {
-		image.classList.remove('-placeholder')
-		image.src = '';
+	async start_camera() {
+		this.#image.classList.remove('-placeholder')
+		this.#image.src = '';
 		try {
-			if (!streaming) {
+			if (!this.#streaming) {
 				const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-				video.srcObject = stream;
-				video.play();
+				this.#video.srcObject = stream;
+				this.#video.play();
 			}
-			show_controls();
+			this.show_controls();
 		}
 		catch(error) {
 			console.error(`An error occurred: ${error}`);
 		}
 	}
 
-	async function take_picture(event) {
+	async take_picture(event) {
 		event.preventDefault();
 		
-		if (canvas && width && height) {
-			canvas.width = width;
-			canvas.height = height;
-			context?.drawImage(video, 0, 0, width, height);
+		if (this.#canvas && this.#width && this.#height) {
+			this.#canvas.width = this.#width;
+			this.#canvas.height = this.#height;
+			this.#context?.drawImage(this.#video, 0, 0, this.#width, this.#height);
 
-			const data = canvas.toDataURL("image/png");
-			image.setAttribute("src", data);
-			saved_image = true;
+			const data = this.#canvas.toDataURL("image/png");
+			this.#image.setAttribute("src", data);
+			this.#saved_image = true;
 		} else {
-			clear_picture();
+			this.clear_picture();
 		}
 	}
 
-	function clear_picture() {
-		if(context) {
-			context.clearRect(0, 0, canvas.width, canvas.height);
+	async clear_picture() {
+		if(this.#context) {
+			this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
 		}
 
-		const data = canvas?.toDataURL("image/png");
-		image.setAttribute("src", data);
+		const data = this.#canvas?.toDataURL("image/png");
+		this.#image.setAttribute("src", data);
 	}
 
-	function handle_video_canplay(ev) {
-		if (!streaming) {
-			height = (video.videoHeight / video.videoWidth) * width;
-
-			if (isNaN(height)) {
-				height = width / (4 / 3);
-			}
-
-			video.setAttribute("width", width);
-			video.setAttribute("height", height);
-			canvas?.setAttribute("width", width);
-			canvas?.setAttribute("height", height);
-			streaming = true;
+	async handle_video_canplay(ev) {
+		if (!this.#streaming) {
+			this.#height = (this.#video.videoHeight / this.#video.videoWidth) * this.#width;
+			this.#video.setAttribute("width", this.#width);
+			this.#video.setAttribute("height", this.#height);
+			this.#canvas?.setAttribute("width", this.#width);
+			this.#canvas?.setAttribute("height", this.#height);
+			this.streaming = true;
 		}
 	}
 
-	function show_controls() {
-		controls_container.classList.remove('-hidden');
+	async show_controls() {
+		this.#controls_container.classList.remove('-hidden');
 	}
 
-	function handle_clear_btn_click() {
-		if(saved_image) {
-			clear_picture();
-			saved_image = false;
+	async handle_clear_btn_click() {
+		if(this.#saved_image) {
+			this.clear_picture();
+			this.#saved_image = false;
 		}
 		else {
-			video.pause();
-			video.srcObject = null;
-			streaming = false;
+			this.#video.pause();
+			this.#video.srcObject = null;
+			this.#streaming = false;
 		}
 	}
 }

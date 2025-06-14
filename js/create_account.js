@@ -1,7 +1,7 @@
 "use-strict"
 import { load_view } from './page_loader.js'
 //import { load_view } from './js/page_loader.js'
-import { init as init_camera_controls } from './camera_control.js'
+import { CameraControl } from './camera_control.js'
 
 // ---------------------------------
 // Selectors
@@ -12,7 +12,7 @@ const back_btn = base.querySelector('.back-btn');
 // ---------------------------------
 // init
 // ---------------------------------
-init_camera_controls();
+const camera = new CameraControl();
 
 // ---------------------------------
 // Events
