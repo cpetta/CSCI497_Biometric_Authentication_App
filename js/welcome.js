@@ -2,7 +2,6 @@
 import { load_view } from './page_loader.js'
 //import { load_view } from './js/page_loader.js'
 
-console.log('welcome.js');
 // ---------------------------------
 // Selectors
 // ---------------------------------
@@ -22,8 +21,6 @@ create_account_btn.addEventListener('click', handle_create_account_btn_click)
 // ---------------------------------
 // Functions
 // ---------------------------------
-
-
 function handle_login_btn_click() {
 	load_view("login");
 }

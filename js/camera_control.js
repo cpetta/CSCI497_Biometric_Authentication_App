@@ -78,7 +78,6 @@ export async function init() {
 
 	function handle_video_canplay(ev) {
 		if (!streaming) {
-			console.log('handle_video_canplay');
 			height = (video.videoHeight / video.videoWidth) * width;
 
 			if (isNaN(height)) {
