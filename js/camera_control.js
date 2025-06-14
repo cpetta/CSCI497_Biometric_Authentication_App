@@ -7,7 +7,6 @@ export class CameraControl {
 	#video = this.#base.querySelector('.video-stream');
 	#canvas = this.#base.querySelector('.video-canvas');
 	#image = this.#base.querySelector('.video-image');
-
 	#controls_container = this.#base.querySelector('.camera-controls-buttons-container');
 	#start_btn = document.querySelector('.video-start-btn');
 	#picture_btn = this.#base.querySelector('.take-picture-btn');
@@ -22,6 +21,10 @@ export class CameraControl {
 	#streaming = false;
 	#saved_image = false;
 	#context = this.#canvas?.getContext("2d");
+
+	get image() {
+		return this.#image.src;
+	}
 
 	// ---------------------------------
 	// Events
@@ -69,12 +72,8 @@ export class CameraControl {
 	}
 
 	async clear_picture() {
-		if(this.#context) {
-			this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
-		}
-
-		const data = this.#canvas?.toDataURL("image/png");
-		this.#image.setAttribute("src", data);
+		this.#context?.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+		this.#image?.setAttribute("src", '');
 	}
 
 	async handle_video_canplay(ev) {

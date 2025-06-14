@@ -40,6 +40,8 @@ async  function handle_new_passkey_btn_click(event) {
 
 async  function handle_save_image_btn_click(event) {
 	console.log('TODO: Implement Image saving logic', event);
+	console.log('camera image', camera.image);
+
 }
 
 async  function get_passkey_list() {
