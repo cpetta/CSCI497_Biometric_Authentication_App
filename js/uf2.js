@@ -1,7 +1,7 @@
 export class UF2 {
 	#challenge;
 	#rp = {
-		id: "localhost",
+		id: "cpetta.github.io",
 		name: "CSCI497 - Biometric Authentication App",
 	};
 
