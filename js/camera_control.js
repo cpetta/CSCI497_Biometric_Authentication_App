@@ -36,6 +36,8 @@ export async function init() {
 	// Functions
 	// ---------------------------------
 	async function start_camera() {
+		image.classList.remove('-placeholder-image')
+		image.src = '';
 		try {
 			if (!streaming) {
 				const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });

@@ -233,6 +233,13 @@ button:focus {
 	z-index: 1;
 }
 
+.video-image.-placeholder {
+	animation: none;
+	filter: invert(1);
+	opacity: 1;
+	padding-top: 75px;
+}
+
 .video-canvas {
 	z-index: 2;
 }
@@ -370,6 +377,10 @@ button:focus {
 #manage-account-view .video-image,
 #manage-account-view .video-canvas {
 	object-fit: cover;
+}
+
+#manage-account-view .video-image.-placeholder {
+	padding: 0;
 }
 
 .passkey-list {
