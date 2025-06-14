@@ -107,9 +107,11 @@ export class CameraControl {
 
 	async show_controls() {
 		this.#controls_container.classList.remove('-hidden');
+		this.#controls_container.classList.add('-show');
 	}
 
 	async hide_controls() {
+		this.#controls_container.classList.remove('-show');
 		this.#controls_container.classList.add('-hidden');
 	}
 
