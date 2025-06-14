@@ -18,10 +18,11 @@ body {
 	background-repeat: no-repeat;
 	background-size: auto;
 	display: grid;
+	font-family: Arial, Helvetica, sans-serif;
 	margin: 0;
 	min-height: 100vh;
 	min-width: 100vw;
-	font-family: Arial, Helvetica, sans-serif;
+	overflow: auto;
 }
 
 main {
@@ -34,7 +35,7 @@ main {
 	height: 50vh;
 	margin: 20px;
 	max-width: 820px;
-	min-height: fit-content;
+	min-height: 500px;
 	min-width: 300px;
 	padding: 20px;
 	place-self: center;
@@ -376,6 +377,7 @@ button:focus {
 	justify-content: space-between;
 }
 
+
 #manage-account-view .camera-controls-container {
 	grid-area: video;
 	max-height: 300px;
@@ -435,9 +437,43 @@ button:focus {
 /*--------------------------*/
 /* Mobile specific changes	*/
 /*--------------------------*/
-@media (max-width: 500px) {
+@media (max-width: 750px) {
 	main {
 		height: 90vh;
 		width: calc(100% - 80px);
+	}
+
+	#manage-account-view {
+		grid-template-areas:
+			"video"
+			"passkeys"
+			"buttons";
+		grid-template-columns: 1fr;
+	}
+
+	#manage-account-view .camera-controls-container {
+		height: 100%;
+		max-height: unset;
+		max-width: unset;
+		place-self: center;
+		width: 100%;
+	}
+
+	#manage-account-view .video-image.-placeholder {
+		object-fit: contain;
+	}
+
+	.page-control-buttons {
+		flex-flow: column;
+	}
+
+	.passkey-list {
+		height:20vh;
+		max-height: 200px;
+		min-height: 120px;
+	}
+
+	.back-btn {
+		order: 5;
 	}
 }
