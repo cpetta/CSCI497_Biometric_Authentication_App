@@ -21,6 +21,7 @@ export class CameraControl {
 	#streaming = false;
 	#saved_image = false;
 	#context = this.#canvas?.getContext("2d");
+	#placeholder_image_src;
 
 	#onSaveCB;
 
@@ -46,7 +47,9 @@ export class CameraControl {
 	// ---------------------------------
 	async start_camera() {
 		this.#image.classList.remove('-placeholder')
+		this.#placeholder_image_src = this.#image.src;
 		this.#image.src = '';
+
 		try {
 			if (!this.#streaming) {
 				const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
@@ -58,6 +61,16 @@ export class CameraControl {
 		catch(error) {
 			console.error(`An error occurred: ${error}`);
 		}
+	}
+
+	async  stop_camera() {
+		this.#image.classList.add('-placeholder')
+		this.#image.src = this.#placeholder_image_src;
+
+		this.#video.pause();
+		this.#video.srcObject = null;
+		this.#streaming = false;
+		this.hide_controls();
 	}
 
 	async take_picture(event) {
@@ -96,15 +109,17 @@ export class CameraControl {
 		this.#controls_container.classList.remove('-hidden');
 	}
 
+	async hide_controls() {
+		this.#controls_container.classList.add('-hidden');
+	}
+
 	async handle_clear_btn_click() {
 		if(this.#saved_image) {
 			this.clear_picture();
 			this.#saved_image = false;
 		}
 		else {
-			this.#video.pause();
-			this.#video.srcObject = null;
-			this.#streaming = false;
+			this.stop_camera();
 		}
 	}
 
