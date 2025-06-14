@@ -30,6 +30,7 @@ save_image_btn.addEventListener('click', handle_save_image_btn_click);
 // ---------------------------------
 async  function handle_logout_btn_click(event) {
 	console.log('TODO: Implement logout logic', event);
+	load_view('welcome');
 }
 
 async  function handle_new_passkey_btn_click(event) {
