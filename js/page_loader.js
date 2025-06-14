@@ -1,6 +1,5 @@
 "use-strict"
 import { sleep } from './sleep.js';
-//import { sleep } from './js/sleep.js';
 
 // ---------------------------------
 // Config

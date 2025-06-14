@@ -1,8 +1,7 @@
 "use-strict"
-import { load_view } from './page_loader.js';
-//import { load_view } from './js/page_loader.js'
-import { CameraControl } from './camera_control.js';
-import { UF2 } from './uf2.js';
+import { load_view } from './js/page_loader.js'
+import { CameraControl } from './js/camera_control.js';
+import { UF2 } from './js/uf2.js';
 
 // ---------------------------------
 // Selectors
