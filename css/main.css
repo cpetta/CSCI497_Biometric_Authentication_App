@@ -51,12 +51,15 @@ main {
 /* Button Styles		 */
 /*-----------------------*/
 button {
+	align-items: center;
 	background: #45b1ef;
 	border-radius: 7px;
 	border: none;
 	color:white;
 	cursor: pointer;
+	display: flex;
 	font-size: 12pt;
+	gap: var(--gap);
 	min-height: 10mm;
 	padding: 12px 15px;
 	transition: all 0.25s ease;
@@ -66,6 +69,16 @@ button:hover,
 button:focus {
 	border-radius: 10px;
 	background: #23a5f0;
+}
+
+.btn-icon {
+	height: 1.5em;
+	width: 1.5em;
+	filter:invert(1);
+}
+
+.btn-text {
+	
 }
 
 #app {

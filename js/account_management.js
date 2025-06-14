@@ -67,7 +67,7 @@ function create_passkey_list_item(data) {
 	const remove_icon = document.createElement('img');
 	remove_icon.classList.add('passkey-list-icon');
 	remove_icon.classList.add('-delete');
-	remove_icon.src = './assets/x-mark.svg';
+	remove_icon.src = './assets/xmark-solid.svg';
 	remove_icon.alt = 'X';
 	remove_icon.height = 25;
 	remove_icon.width = 25;
