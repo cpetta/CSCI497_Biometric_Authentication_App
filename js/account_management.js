@@ -1,7 +1,8 @@
 "use-strict"
-import { load_view } from './page_loader.js'
+import { load_view } from './page_loader.js';
 //import { load_view } from './js/page_loader.js'
-import { CameraControl } from './camera_control.js'
+import { CameraControl } from './camera_control.js';
+import { UF2 } from './uf2.js';
 
 // ---------------------------------
 // Selectors
@@ -10,7 +11,7 @@ const base = document.getElementById('manage-account-view');
 const back_btn = base.querySelector('.back-btn');
 const logout_btn = base.querySelector('.logout-btn');
 const new_passkey_btn = base.querySelector('.new-passkey-btn');
-const passkey_list = base.querySelector('.passkey-list');
+const passkey_list_node = base.querySelector('.passkey-list');
 // ---------------------------------
 // init
 // ---------------------------------
@@ -35,8 +36,30 @@ async  function handle_logout_btn_click(event) {
 }
 
 async  function handle_new_passkey_btn_click(event) {
-	console.log('TODO: Implement new passkey logic', event);
-	get_passkey_list();
+	console.log('TODO: Implement new passkey form logic', event);
+	const passkey_name = 'Passkey Name Placeholder';
+	const username = 'janedoe';
+	const display_name = 'Jane Doe';
+	const uf2 = new UF2();
+	
+	try {
+		await uf2.create({
+			name: username,
+			displayName: display_name,
+		});
+	}
+	catch(error) {
+		console.error(error);
+	}
+
+	// Debug
+	const passkey_node = create_passkey_list_item({
+		name: passkey_name,
+	});
+	passkey_list_node.append(passkey_node);
+
+	//get_passkey_list();
+	console.log('uf2.credential', uf2.credential);
 }
 
 async  function handle_save_image_btn_click(event) {
@@ -46,10 +69,20 @@ async  function handle_save_image_btn_click(event) {
 }
 
 async  function get_passkey_list() {
-	const debug_1 = create_passkey_list_item({name: 'Google Pixel 6a'}); // Debug
-	const debug_2 = create_passkey_list_item({name: 'Mini Yubikey'}); // Debug
+	console.log('TODO: get registered passkey names from database');
+	
+	passkey_list_node.innerHTML = '';
 
-	passkey_list.append(debug_1, debug_2);
+	const debug_passkeys = [
+		{name: 'Google Pixel 6a'},
+	];
+
+	const passkey_list = debug_passkeys;
+
+	for(const passkey of passkey_list) {
+		const passkey_node = create_passkey_list_item(passkey);
+		passkey_list_node.append(passkey_node);
+	}
 }
 
 function create_passkey_list_item(data) {
