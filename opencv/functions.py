@@ -44,6 +44,9 @@ def convert_images_to_grayscale(in_dir, out_dir):
 		img_gray = cv.equalizeHist(img_gray);
 		faces = detect_faces(img_gray);
 
+		if len(faces) <= 0:
+			continue;
+
 		img_gray = crop_faces(img_gray, faces);
 		cv.imwrite(out_dir + '/cropped_'+ file, img_gray);
 
