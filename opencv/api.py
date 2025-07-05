@@ -34,7 +34,7 @@ def get_user():
 def add_user():
 	user_name = request.form.get('username');
 	
-	if(user_name is None):
+	if(user_name is None or user_name == ''):
 		return jsonify({
 			'error':'No username provided',
 		});

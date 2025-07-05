@@ -178,6 +178,7 @@ def create_db():
 		db_cursor.execute('''
 			CREATE TABLE users
 			(user_id INTEGER PRIMARY KEY,
+			name,
 			user_name,
 			create_date DEFALT CURRENT_TIMESTAMP NOT NULL)''');
 

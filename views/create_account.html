@@ -1,9 +1,22 @@
 <div id="create-account-view">
-	<form action="">
-		<label for="username">Username:</label>
-		<input id="username" class="username-input" type="text">
-		<button class="username-submit" type="submit">Submit</button>
-	</form>
+	<div class="step-one">
+		<h1>Signup</h1>
+		<p class="instructions -step-1">This site uses facial recognition during login to determine your username during each login attempt, we need to take a short video from your webcam in order to determine that it's you later.</p>
+		<p class="instructions -step-1">Step 1: Enter your name and a username</p>
+		<p class="instructions -step-2">Step 2: Start your camera to register your face for facial recognition</p>
+		<form class="user-form" action="">
+			<label for="name" class="form-label">
+				<span class="label-text">Name</span>
+				<input id="name" class="name-input" type="text">
+			</label>
+			<label for="username">
+				<span class="label-text">Username</span>
+				<input id="username" class="username-input" type="text">
+			</label>
+			<button class="username-submit" type="submit">Check Username</button>
+		</form>
+	</div>
+	
 	<div class="camera-controls-container">
 		<video class="video-stream">Video stream not available.</video>
 		<img class="video-image -hidden -placeholder" src="./assets/person-outline.svg" alt="">

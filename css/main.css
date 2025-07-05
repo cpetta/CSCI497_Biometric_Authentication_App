@@ -336,14 +336,57 @@ button:focus {
 }
 
 /*-----------------------*/
-/* Welcome page styles	 */
+/* Create Account styles */
 /*-----------------------*/
 #create-account-view {
 	display: flex;
-	flex-flow: column;
+	flex-flow: row wrap;
 	gap: var(--gap);
+	justify-content: center;
 }
 
+.step-one {
+	flex: 1 1;
+	max-width: 300px;
+}
+
+#create-account-view .camera-controls-container {
+	flex: 1 1;
+	height: unset;
+	min-width: 45%;
+}
+
+#create-account-view .page-control-buttons {
+	align-self: end;
+}
+
+.user-form {
+	display: flex;
+	flex-flow: column;
+}
+
+label {
+	display: block;
+	margin: 10px auto;
+	position: relative;
+	width: 80%;
+}
+
+input {
+	font-family: verdana, arial;
+	font-size: 11pt;
+	min-height: 10mm;
+	padding: .75em 1em;
+	width: 100%;
+}
+
+.label-text {
+	background: white;
+	left: .5em;
+	padding: 0 .2em;
+	position: absolute;
+	top: -.5em;
+}
 
 
 /*-----------------------*/
