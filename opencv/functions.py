@@ -3,6 +3,7 @@ import cv2 as cv;
 import numpy as np
 import dlib;
 import sqlite3 as sql;
+import time    
 
 #Config Settings
 crop_pad = 20;
@@ -176,9 +177,9 @@ def create_db():
 	if(not 'users' in db_list):
 		db_cursor.execute('''
 			CREATE TABLE users
-			(user_id integer auto_increment primary key,
+			(user_id INTEGER PRIMARY KEY,
 			user_name,
-			create_date DEFALT CURRENT_TIMESTAMP)''');
+			create_date DEFALT CURRENT_TIMESTAMP NOT NULL)''');
 
 	if(not 'recognizors' in db_list):
 		db_cursor.execute('''
@@ -198,6 +199,8 @@ def create_db():
 		friendly_name varchar(200),
 		create_date DEFALT CURRENT_TIMESTAMP)''');
 
+	db_cursor.close();
+	db_connection.close();
 	return 1;
 
 @staticmethod
@@ -207,8 +210,22 @@ def delete_db():
 
 	db_list = get_db_list();
 
-	for db in db_list:
-		db_cursor.execute("DROP TABLE ?", db), 
+	
+	if('users' in db_list):
+		db_cursor.execute("DROP TABLE users");
+	
+	if('recognizors' in db_list):
+		db_cursor.execute("DROP TABLE recognizors");
+
+	if('user_passkeys' in db_list):
+		db_cursor.execute("DROP TABLE user_passkeys");
+
+	#for db in db_list:
+	#	print(db);
+	#	db_cursor.execute("DROP TABLE " + db);
+	
+	db_cursor.close();
+	db_connection.close();
 
 @staticmethod
 def get_db_list():
@@ -222,6 +239,9 @@ def get_db_list():
 	for db in result.fetchall():
 		db_list.append(db[0]);
 	
+	db_cursor.close();
+	db_connection.close();
+
 	return db_list;
 
 @staticmethod
@@ -234,6 +254,10 @@ def get_user(username):
 	args = [(username)];
 	query = db_cursor.execute('SELECT * FROM users where user_name=?', (args));
 	result = query.fetchall();
+	
+	db_cursor.close();
+	db_connection.close();
+
 	return result;
 
 @staticmethod
@@ -243,9 +267,14 @@ def add_user(username):
 	
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
-	args = [(username)];
-	query = db_cursor.execute('INSERT INTO users (user_name) VALUES(?)', (args));
+	now = time.strftime('%Y-%m-%d %H:%M:%S');
+
+	query = db_cursor.execute('INSERT INTO users (user_name, create_date) VALUES(?, ?)', (username, now));
 	db_connection.commit();
 
 	result = get_user(username);
+	
+	db_cursor.close();
+	db_connection.close();
+
 	return result;
