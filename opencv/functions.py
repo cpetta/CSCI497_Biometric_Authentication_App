@@ -170,19 +170,45 @@ def run_recognizer(recognizer):
 def create_db():
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
-
+	delete_db();
 	db_list = get_db_list();
 
 	if(not 'users' in db_list):
-		db_cursor.execute("CREATE TABLE users(user_id, user_name, create_date)");
+		db_cursor.execute('''
+			CREATE TABLE users
+			(user_id integer auto_increment primary key,
+			user_name,
+			create_date DEFALT CURRENT_TIMESTAMP)''');
 
 	if(not 'recognizors' in db_list):
-		db_cursor.execute("CREATE TABLE recognizors(face_data_id, user_id, face_recognizor_xml, create_date)");
+		db_cursor.execute('''
+			CREATE TABLE recognizors
+			(face_data_id integer auto_increment primary key,
+			user_id integer,
+			face_recognizor_xml,
+			create_date DEFALT CURRENT_TIMESTAMP)''');
 
 	if(not 'user_passkeys' in db_list):
-		db_cursor.execute("CREATE TABLE user_passkeys(credential_id, user_id, public_key, counter, friendly_name, create_date)");
+		db_cursor.execute('''
+		CREATE TABLE user_passkeys
+		(credential_id integer auto_increment primary key,
+		user_id integer,
+		public_key varchar(200),
+		counter integer,
+		friendly_name varchar(200),
+		create_date DEFALT CURRENT_TIMESTAMP)''');
 
 	return 1;
+
+@staticmethod
+def delete_db():
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+
+	db_list = get_db_list();
+
+	for db in db_list:
+		db_cursor.execute("DROP TABLE ?", db), 
 
 @staticmethod
 def get_db_list():
