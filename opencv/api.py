@@ -2,9 +2,12 @@ import json;
 
 import functions as fn;
 from flask import Flask, request, jsonify;
+from flask_cors import CORS, cross_origin
 
 path = 'api';
 app = Flask(__name__);
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 @app.route('/api/setup', methods=['GET'])
 def setup():
@@ -26,12 +29,15 @@ def get_user():
 		'result': result,
 	});
 
-@app.route('/api/add_user', methods=['GET'])
+@app.route('/api/user', methods=['POST'])
+@cross_origin()
 def add_user():
-	user_name = request.args.get('user');
+	user_name = request.form.get('username');
 	
 	if(user_name is None):
-		return jsonify({'error':'No username provided'});
+		return jsonify({
+			'error':'No username provided',
+		});
 
 	result = fn.add_user(user_name);
 
@@ -42,4 +48,5 @@ def add_user():
 	});
 
 
-app.run(debug=True)
+#app.run(debug=True)
+app.run(port=8080, debug=True)
