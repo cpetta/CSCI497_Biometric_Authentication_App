@@ -2,8 +2,12 @@ import os;
 import cv2 as cv;
 import numpy as np
 import dlib;
+import sqlite3 as sql;
 
+#Config Settings
 crop_pad = 20;
+db_name = 'csci497_biometric_auth_app.db'
+
 
 @staticmethod
 def detect_faces(img):
@@ -161,3 +165,35 @@ def run_recognizer(recognizer):
 			break
 	cap.release()
 	cv.destroyAllWindows()
+
+@staticmethod
+def create_db():
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+
+	db_list = get_db_list();
+
+	if(not 'users' in db_list):
+		db_cursor.execute("CREATE TABLE users(user_id, user_name, create_date)");
+
+	if(not 'recognizors' in db_list):
+		db_cursor.execute("CREATE TABLE recognizors(face_data_id, user_id, face_recognizor_xml, create_date)");
+
+	if(not 'user_passkeys' in db_list):
+		db_cursor.execute("CREATE TABLE user_passkeys(credential_id, user_id, public_key, counter, friendly_name, create_date)");
+
+	return 1;
+
+@staticmethod
+def get_db_list():
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	
+	db_list = [];
+	
+	result = db_cursor.execute("SELECT name FROM sqlite_master");
+	
+	for db in result.fetchall():
+		db_list.append(db[0]);
+	
+	return db_list;
