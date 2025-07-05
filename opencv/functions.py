@@ -197,3 +197,15 @@ def get_db_list():
 		db_list.append(db[0]);
 	
 	return db_list;
+
+@staticmethod
+def get_user(username):
+	if(username is None):
+		raise ValueError('The get_user function expects a username argument')
+	
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	args = [(username)];
+	query = db_cursor.execute('SELECT * FROM users where user_name=?', (args));
+	result = query.fetchall();
+	return result;
