@@ -235,3 +235,17 @@ def get_user(username):
 	query = db_cursor.execute('SELECT * FROM users where user_name=?', (args));
 	result = query.fetchall();
 	return result;
+
+@staticmethod
+def add_user(username):
+	if(username is None):
+		raise ValueError('The get_user function expects a username argument')
+	
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	args = [(username)];
+	query = db_cursor.execute('INSERT INTO users (user_name) VALUES(?)', (args));
+	db_connection.commit();
+
+	result = get_user(username);
+	return result;

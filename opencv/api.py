@@ -13,17 +13,33 @@ def setup():
 	});
 
 @app.route('/api/user', methods=['GET'])
-def get_users():
+def get_user():
 	user_name = request.args.get('user');
 	
 	if(user_name is None):
 		return jsonify({'error':'No username provided'});
 
 	result = fn.get_user(user_name);
-	
+
 	return jsonify({
 		'username': user_name,
 		'result': result,
 	});
+
+@app.route('/api/add_user', methods=['GET'])
+def add_user():
+	user_name = request.args.get('user');
+	
+	if(user_name is None):
+		return jsonify({'error':'No username provided'});
+
+	result = fn.add_user(user_name);
+
+	return jsonify({
+		'function': 'add_user',
+		'username': user_name,
+		'result': result,
+	});
+
 
 app.run(debug=True)
