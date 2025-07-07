@@ -24,10 +24,7 @@ def get_user():
 
 	result = fn.get_user(user_name);
 
-	return jsonify({
-		'username': user_name,
-		'result': result,
-	});
+	return jsonify({'result': result});
 
 @app.route('/api/user', methods=['POST'])
 @cross_origin()
@@ -43,11 +40,7 @@ def add_user():
 
 	result = fn.add_user(name, user_name);
 
-	return jsonify({
-		'function': 'add_user',
-		'username': user_name,
-		'result': result,
-	});
+	return jsonify({'result': result});
 
 
 #app.run(debug=True)
