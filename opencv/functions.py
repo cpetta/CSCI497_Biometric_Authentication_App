@@ -262,6 +262,22 @@ def get_user(username):
 	return result;
 
 @staticmethod
+def check_user_exists(username):
+	create_db();
+	if(username is None):
+		raise ValueError('The get_user function expects a username argument')
+	
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	query = db_cursor.execute('SELECT * FROM users where user_name=?', ([username]));
+	result = query.fetchall();
+	
+	db_cursor.close();
+	db_connection.close();
+
+	return len(result);
+
+@staticmethod
 def add_user(name, username):
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')

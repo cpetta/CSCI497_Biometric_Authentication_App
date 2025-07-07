@@ -28,7 +28,16 @@ username_submit.addEventListener('click', check_username);
 // ---------------------------------
 async function check_username(event) {
 	event.preventDefault();
-	
+
+	const username = username_input.value;
+
+	await fetch("http://127.0.0.1:8080/api/user-exists", {
+		method: "POST",
+		body: new URLSearchParams({'username': username}),
+	});
+}
+
+async function create_user() {
 	const name = name_input.value;
 	const username = username_input.value;
 
