@@ -262,7 +262,7 @@ def get_user(username):
 	return result;
 
 @staticmethod
-def add_user(username):
+def add_user(name, username):
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')
 	
@@ -270,7 +270,10 @@ def add_user(username):
 	db_cursor = db_connection.cursor();
 	now = time.strftime('%Y-%m-%d %H:%M:%S');
 
-	query = db_cursor.execute('INSERT INTO users (user_name, create_date) VALUES(?, ?)', (username, now));
+	query = db_cursor.execute('''
+						   INSERT INTO users
+						   (name, user_name, create_date)
+						   VALUES(?, ?, ?)''', (name, username, now));
 	db_connection.commit();
 
 	result = get_user(username);

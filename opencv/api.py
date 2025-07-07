@@ -32,14 +32,16 @@ def get_user():
 @app.route('/api/user', methods=['POST'])
 @cross_origin()
 def add_user():
+	name = request.form.get('name');
 	user_name = request.form.get('username');
 	
 	if(user_name is None or user_name == ''):
-		return jsonify({
-			'error':'No username provided',
-		});
+		return jsonify({'error':'No username provided'});
 
-	result = fn.add_user(user_name);
+	if(name is None or name == ''):
+		return jsonify({'error':'No name provided'});
+
+	result = fn.add_user(name, user_name);
 
 	return jsonify({
 		'function': 'add_user',

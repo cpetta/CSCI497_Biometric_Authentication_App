@@ -7,6 +7,7 @@ import { CameraControl } from './js/camera_control.js'
 // ---------------------------------
 const base = document.getElementById('create-account-view');
 const back_btn = base.querySelector('.back-btn');
+const name_input =  base.querySelector('#name');
 const username_input =  base.querySelector('#username');
 const username_submit = base.querySelector('.username-submit');
 
@@ -27,9 +28,15 @@ username_submit.addEventListener('click', check_username);
 // ---------------------------------
 async function check_username(event) {
 	event.preventDefault();
+	
+	const name = name_input.value;
 	const username = username_input.value;
+
 	await fetch("http://127.0.0.1:8080/api/user", {
 		method: "POST",
-		body: new URLSearchParams({ 'username': username }),
+		body: new URLSearchParams({
+			'name': name,
+			'username': username,
+		}),
 	});
 }
