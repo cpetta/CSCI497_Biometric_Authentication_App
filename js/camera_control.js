@@ -12,16 +12,24 @@ export class CameraControl {
 	#picture_btn = this.#base.querySelector('.take-picture-btn');
 	#save_btn = this.#base.querySelector('.save-image-btn');
 	#clear_btn = this.#base.querySelector('.end-video-btn');
+	#main_controls = this.#base.querySelector('.primary-controls-container');
+	#start_recording_btn = this.#base.querySelector('.start-recording-btn');
 
 	// ---------------------------------
 	// Init
 	// ---------------------------------
 	#width = 775;
 	#height = 0;
+	#record_time = 500;
+
+	#recording = false;
 	#streaming = false;
 	#saved_image = false;
 	#context = this.#canvas?.getContext("2d");
 	#placeholder_image_src;
+
+	#stream = null;
+	#stream_data = [];
 
 	#onSaveCB;
 
@@ -37,9 +45,10 @@ export class CameraControl {
 
 		this.#video.addEventListener("canplay", this.handle_video_canplay.bind(this));
 		this.#start_btn.addEventListener('click', this.start_camera.bind(this), false);
-		this.#picture_btn.addEventListener('click', this.take_picture.bind(this), false);
+		this.#picture_btn?.addEventListener('click', this.take_picture.bind(this), false);
 		this.#clear_btn.addEventListener('click', this.handle_clear_btn_click.bind(this), false);
-		this.#save_btn.addEventListener('click', this.handle_save.bind(this));
+		this.#save_btn?.addEventListener('click', this.handle_save.bind(this));
+		this.#start_recording_btn?.addEventListener('click', this.start_recording.bind(this));
 	}
 
 	// ---------------------------------
@@ -52,8 +61,8 @@ export class CameraControl {
 
 		try {
 			if (!this.#streaming) {
-				const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
-				this.#video.srcObject = stream;
+				this.#stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+				this.#video.srcObject = this.#stream;
 				this.#video.play();
 			}
 			this.show_controls();
@@ -69,7 +78,12 @@ export class CameraControl {
 
 		this.#video.pause();
 		this.#video.srcObject = null;
+		this.#video.src = null;
 		this.#streaming = false;
+		this.#stream = null;
+		this.#video.controls = false;
+		this.#video.loop = false;
+		this.#video.pause();
 		this.hide_controls();
 	}
 
@@ -108,11 +122,17 @@ export class CameraControl {
 	async show_controls() {
 		this.#controls_container.classList.remove('-hidden');
 		this.#controls_container.classList.add('-show');
+
+		this.#main_controls?.classList?.remove('-hidden');
+		this.#main_controls?.classList.add('-show');
 	}
 
 	async hide_controls() {
 		this.#controls_container.classList.remove('-show');
 		this.#controls_container.classList.add('-hidden');
+
+		this.#main_controls?.classList?.remove('-show');
+		this.#main_controls?.classList.add('-hidden');
 	}
 
 	async handle_clear_btn_click() {
@@ -129,5 +149,50 @@ export class CameraControl {
 		if(typeof this.#onSaveCB == 'function') {
 			this.#onSaveCB();
 		}
+	}
+
+	async start_recording() {
+		try {
+			this.#canvas.style.display = 'none';
+			let recorder = new MediaRecorder(this.#stream);
+
+			recorder.ondataavailable = (event) => this.#stream_data.push(event.data);
+			recorder.start();
+
+			let stopped = new Promise((resolve, reject) => {
+				recorder.onstop = resolve;
+				recorder.onerror = (event) => reject(event.name);
+			});
+
+			let recorded = this.sleep(this.#record_time).then(() => {
+				if (recorder.state === "recording") {
+					recorder.stop();
+				}
+			});
+
+			await Promise.all([stopped, recorded]);
+
+			const blob = new Blob(this.#stream_data, { type: "video/webm" });
+			this.#video.srcObject = null;
+			this.#video.src = URL.createObjectURL(blob);
+			this.#video.controls = true;
+			this.#video.loop = true;
+			this.#video.play();
+		}
+		catch(error) {
+			if (error.name === "NotFoundError") {
+				console.log("Camera or microphone not found. Can't record.");
+			} else {
+				console.log(error);
+			}
+		}
+	}
+
+	async stop_recording() {
+		this.#stream.getTracks().forEach(track => track.stop());
+	}
+
+	async sleep(delay) {
+  		return new Promise(resolve => setTimeout(resolve, delay));
 	}
 }

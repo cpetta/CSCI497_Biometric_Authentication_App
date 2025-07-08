@@ -270,9 +270,19 @@ button:focus {
 	z-index: 5;
 }
 
+.primary-controls-container {
+	left: calc(50% - 200px / 2);
+	margin: auto auto;
+	position: absolute;
+	top: 85%;
+	width: 200px;
+	z-index: 100;
+}
+
 .take-picture-btn,
 .save-image-btn,
-.end-video-btn {
+.end-video-btn,
+.start-recording-btn {
 	display: grid;
 	padding: 7px 10px;
 	place-content: center;
@@ -301,6 +311,17 @@ button:focus {
 .end-video-btn:hover,
 .end-video-btn:focus {
 	background: #FF0000;
+}
+
+.start-recording-btn {
+	display: flex;
+	width: 100%;
+}
+.recording-icon {
+	background: white;
+	border-radius: 100%;
+	height: 1em;
+	width: 1em;
 }
 
 /*-----------------------*/
