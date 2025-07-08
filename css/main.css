@@ -66,6 +66,15 @@ button {
 	transition: all 0.25s ease;
 }
 
+button.-invalid {
+	background: #777;
+}
+
+button.-invalid:focus,
+button.-invalid:hover {
+	background: #888;
+}
+
 button:hover,
 button:focus {
 	border-radius: 10px;
@@ -317,11 +326,18 @@ button:focus {
 	display: flex;
 	width: 100%;
 }
+
 .recording-icon {
 	background: white;
 	border-radius: 100%;
+	border: 2px solid white;
 	height: 1em;
 	width: 1em;
+}
+
+.start-recording-btn.-recording .recording-icon {
+	background: red;
+	border: 2px solid white;
 }
 
 /*-----------------------*/
