@@ -20,7 +20,7 @@ export class CameraControl {
 	// ---------------------------------
 	#width = 775;
 	#height = 0;
-	#record_time = 500;
+	#record_time = 3000;
 
 	#recording = false;
 	#streaming = false;
@@ -30,6 +30,7 @@ export class CameraControl {
 
 	#stream = null;
 	#stream_data = [];
+	#last_recording = null;
 
 	#onSaveCB;
 
@@ -153,6 +154,11 @@ export class CameraControl {
 
 	async start_recording() {
 		try {
+			this.#start_recording_btn.classList.add('-recording');
+			this.#video.src = null;
+			this.#video.srcObject = this.#stream;
+			this.#video.play();
+
 			this.#canvas.style.display = 'none';
 			let recorder = new MediaRecorder(this.#stream);
 
@@ -173,11 +179,14 @@ export class CameraControl {
 			await Promise.all([stopped, recorded]);
 
 			const blob = new Blob(this.#stream_data, { type: "video/webm" });
+			this.#last_recording = blob;
+			this.#stream_data = [];
 			this.#video.srcObject = null;
 			this.#video.src = URL.createObjectURL(blob);
 			this.#video.controls = true;
 			this.#video.loop = true;
 			this.#video.play();
+			this.#start_recording_btn.classList.remove('-recording');
 		}
 		catch(error) {
 			if (error.name === "NotFoundError") {
