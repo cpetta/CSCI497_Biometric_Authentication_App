@@ -263,7 +263,6 @@ def get_user(username):
 
 @staticmethod
 def check_user_exists(username):
-	create_db();
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')
 	
