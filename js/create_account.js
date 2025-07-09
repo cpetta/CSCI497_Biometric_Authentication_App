@@ -11,9 +11,13 @@ const delay = 500;
 // Selectors
 // ---------------------------------
 const base = document.getElementById('create-account-view');
+const message_container = base.querySelector('.message-container');
+const form = base.querySelector('.user-form');
+const video = base.querySelector('.video-stream');
 const back_btn = base.querySelector('.back-btn');
 const name_input =  base.querySelector('#name');
 const username_input =  base.querySelector('#username');
+const create_account_btn =  base.querySelector('#create-account-btn');
 //const username_submit = base.querySelector('.username-submit');
 
 
@@ -26,17 +30,28 @@ const camera = new CameraControl();
 // ---------------------------------
 // Events
 // ---------------------------------
+base.addEventListener('click', handle_page_click);
+form.addEventListener('input', hide_messages);
 back_btn.addEventListener('click', () => load_view('welcome'));
 username_input.addEventListener('input', delay_check_username);
 username_input.addEventListener('blur', check_username);
+create_account_btn.addEventListener('click', handle_submit);
+
+name_input.addEventListener('input', e => e.target.classList.remove('-init'), {once: true,});
+username_input.addEventListener('input', e => e.target.classList.remove('-init'), {once: true,});
 //username_submit.addEventListener('click', check_username);
 
 
 // ---------------------------------
 // Functions
 // ---------------------------------
+async function handle_page_click(event) {
+	if(event.target.closest('#create-account-btn') != create_account_btn) {
+		hide_messages();
+	}
+}
+
 async function delay_check_username(event) {
-	console.log(delay_check);
 	if(delay_check) {
 		clearTimeout(delay_check);
 		delay_check = null;
@@ -51,6 +66,11 @@ async function delay_check_username(event) {
 
 async function check_username(event) {
 	event.preventDefault();
+	username_input.setCustomValidity("");
+
+	if(!username_input.checkValidity()) {
+		return;
+	}
 
 	const username = username_input.value;
 
@@ -59,12 +79,13 @@ async function check_username(event) {
 		body: new URLSearchParams({'username': username}),
 	});
 
-	const response = request.json();
+	const response = await request.json();
 	const result = response.result;
-	if(result == 1) {
-		console.log('Username Taken');
+
+	if(result == '1') {
+		username_input.setCustomValidity('Username Taken');
 	} else {
-		console.log('Checkmark');
+		username_input.setCustomValidity("");
 	}
 }
 
@@ -79,4 +100,45 @@ async function create_user() {
 			'username': username,
 		}),
 	});
+}
+
+async function handle_submit(event) {
+	event.preventDefault();
+	hide_messages();
+	const form_is_valid = form.checkValidity();
+	const video_is_valid = Boolean(video.src);
+
+	if(form_is_valid && video_is_valid) {
+		create_user();
+	} else {
+		display_form_validity_message();
+	}
+}
+
+async function display_form_validity_message() {
+	const inputs = form.querySelectorAll('input');
+	const video_is_valid = Boolean(video.src);
+	
+	const message_list = [];
+
+	if(!video_is_valid) {
+		message_list.push('Invalid Facial Recognition - Video Must be Recorded');
+	}
+
+	for(const input of inputs) {
+		if(!input.checkValidity()) {
+			const label = input.closest('label')?.innerText;
+			const message = input.validationMessage;
+			message_list.push(`Invalid ${label} Entered - ${message}`);
+		}
+	}
+
+	message_container.innerText = message_list.join('\n');
+	message_container.classList.add('-show');
+	message_container.classList.remove('-hidden');
+}
+
+function hide_messages() {
+	message_container.classList.add('-hidden');
+	message_container.classList.remove('-show');
 }

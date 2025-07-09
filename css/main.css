@@ -380,6 +380,26 @@ button:focus {
 	flex-flow: row wrap;
 	gap: var(--gap);
 	justify-content: center;
+	position: relative;
+}
+
+.message-container {
+	background: white;
+	border-radius: 5px;
+	border: 2px solid red;
+	box-shadow: 0 2px 7px rgba(0,0,0,0.35);
+	padding: 1em;
+	position: absolute;
+	width: 30em;
+	z-index: 100;
+}
+
+.message-container br {
+	margin-bottom: 0.5em;
+}
+
+.message-container.-hidden {
+	opacity: 0;
 }
 
 .step-one {
@@ -410,11 +430,21 @@ label {
 }
 
 input {
+	border-radius: 4px;
+	border: 1px solid #666;
 	font-family: verdana, arial;
 	font-size: 11pt;
 	min-height: 10mm;
 	padding: .75em 1em;
 	width: 100%;
+}
+
+input:not(.-init):invalid {
+	outline: 2px solid red;
+}
+
+input:valid {
+	outline: 2px solid mediumseagreen;
 }
 
 .label-text {
