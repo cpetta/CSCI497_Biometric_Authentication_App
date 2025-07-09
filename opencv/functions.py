@@ -266,6 +266,8 @@ def check_user_exists(username):
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')
 	
+	username = username.lower();
+
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
 	query = db_cursor.execute('SELECT * FROM users where user_name=?', ([username]));
@@ -281,6 +283,9 @@ def add_user(name, username):
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')
 	
+	name = name.lower();
+	username = username.lower();
+
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
 	now = time.strftime('%Y-%m-%d %H:%M:%S');
