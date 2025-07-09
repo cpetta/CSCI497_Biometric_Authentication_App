@@ -54,7 +54,6 @@ async function delay_check_username(event) {
 	if(delay_check) {
 		clearTimeout(delay_check);
 		delay_check = null;
-		return;
 	}
 
 	delay_check = setTimeout(() => {
