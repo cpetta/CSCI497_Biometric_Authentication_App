@@ -38,6 +38,10 @@ export class CameraControl {
 		return this.#image.src;
 	}
 
+	get has_valid_video() {
+		return Boolean(this.#video.src);
+	}
+
 	// ---------------------------------
 	// Events
 	// ---------------------------------

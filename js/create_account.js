@@ -1,6 +1,6 @@
-"use-strict"
-import { load_view } from './js/page_loader.js'
-import { CameraControl } from './js/camera_control.js'
+"use-strict";
+import { load_view } from './js/page_loader.js';
+import { CameraControl } from './js/camera_control.js';
 
 // ---------------------------------
 // Config
@@ -13,7 +13,6 @@ const delay = 500;
 const base = document.getElementById('create-account-view');
 const message_container = base.querySelector('.message-container');
 const form = base.querySelector('.user-form');
-const video = base.querySelector('.video-stream');
 const back_btn = base.querySelector('.back-btn');
 const name_input =  base.querySelector('#name');
 const username_input =  base.querySelector('#username');
@@ -106,7 +105,6 @@ async function handle_submit(event) {
 	event.preventDefault();
 	hide_messages();
 	const form_is_valid = form.checkValidity();
-	const video_is_valid = Boolean(video.src);
 
 	if(form_is_valid && video_is_valid) {
 		create_user();
@@ -117,11 +115,10 @@ async function handle_submit(event) {
 
 async function display_form_validity_message() {
 	const inputs = form.querySelectorAll('input');
-	const video_is_valid = Boolean(video.src);
 	
 	const message_list = [];
 
-	if(!video_is_valid) {
+	if(!camera.has_valid_video) {
 		message_list.push('Invalid Facial Recognition - Video Must be Recorded');
 	}
 
