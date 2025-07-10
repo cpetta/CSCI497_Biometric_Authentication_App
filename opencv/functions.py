@@ -41,31 +41,13 @@ def crop_face(img, face, pad):
 	return img_face_cropped;
 
 @staticmethod
-def convert_images_to_grayscale(in_dir, out_dir):
-	files = os.listdir(in_dir);
+def convert_video_to_images(user_id):
+	path = f'user_{user_id}';
+	video_path = os.path.join(path, 'video');
+	image_path = os.path.join(path, 'images');
 
-	if not os.path.exists(out_dir):
-		os.makedirs(out_dir);
-
-	for file in files:
-		img = cv.imread(in_dir +'/'+ file, cv.IMREAD_COLOR);
-		img_gray = cv.cvtColor(img, cv.COLOR_BGR2GRAY);
-		img_gray = cv.equalizeHist(img_gray);
-		faces = detect_faces(img_gray);
-
-		if len(faces) <= 0 or len(faces) > 1:
-			continue;
-		
-		img_gray = crop_face(img_gray, faces[0], 0);
-		cv.imwrite(out_dir + '/cropped_'+ file, img_gray);
-
-@staticmethod
-def get_users():
-	return {
-		'user1': 0,
-		'user2': 1,
-		'user3': 2,
-	}
+	filename = os.path.join(video_path, f'{user_id}_video.webm');
+	video = cv.VideoCapture(filename);
 
 @staticmethod
 def get_user_id(username):
@@ -73,16 +55,12 @@ def get_user_id(username):
 	return users[username];
 
 @staticmethod
-def capture_images(user):
+	if not os.path.exists(image_path):
+		os.makedirs(image_path);
+	
 	i = 0;
-	path = user + '_capture';
-	camera = cv.VideoCapture(0);
-
-	if not os.path.exists(path):
-		os.makedirs(path);
-
 	while True:
-		ret, frame = camera.read()
+		ret, frame = video.read();
 		gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY);
 		gray = cv.equalizeHist(gray);
 		faces = detect_faces(gray);
@@ -90,25 +68,13 @@ def capture_images(user):
 		if len(faces) <= 0 or len(faces) > 1:
 			continue;
 
-		face = faces[0];
-		x = face.left();
-		y = face.top();
-		x2 = face.right();
-		y2 = face.bottom();
-
-		cv.imwrite(f'{path}/{i}.jpg', frame);
-
+		img_gray = crop_face(gray, faces[0], 0);
+		image_file = os.path.join(image_path, f'{i}.jpg');
+		cv.imwrite(image_file, img_gray);
 		i += 1
 
-		cv.rectangle(frame, (x, y), (x2,y2), (0, 255, 0), 2);
-		cv.putText(frame, f'progress: %{i}', (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2);
-		cv.imshow('Capture Faces', frame);
-
-		if i >= 100 or cv.waitKey(1) & 0xFF == ord('q'):
+		if i > 100:
 			break
-		
-	camera.release()
-	cv.destroyAllWindows()
 
 @staticmethod
 def train_recognizer(user_id, face_dir):
