@@ -74,7 +74,7 @@ async function check_username(event) {
 
 	const username = username_input.value;
 
-	const request = await fetch("http://127.0.0.1:8080/api/user-exists", {
+	const request = await fetch("http://localhost:8080/api/user-exists", {
 		method: "POST",
 		body: new URLSearchParams({'username': username}),
 	});
@@ -93,7 +93,7 @@ async function create_user() {
 	const name = name_input.value;
 	const username = username_input.value;
 
-	await fetch("http://127.0.0.1:8080/api/user", {
+	const response = await fetch("http://localhost:8080/api/user", {
 		method: "POST",
 		body: new URLSearchParams({
 			'name': name,
@@ -164,7 +164,7 @@ async function create_uf2(event) {
 			displayName: name,
 		});
 
-		const response = await fetch("http://127.0.0.1:8080/api/create_passkey", {
+		const response = await fetch("http://localhost:8080/api/create_passkey", {
 			method: "POST",
 			body: new URLSearchParams({
 				'user_id': 1,
