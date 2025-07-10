@@ -18,7 +18,6 @@ const back_btn = base.querySelector('.back-btn');
 const name_input =  base.querySelector('#name');
 const username_input =  base.querySelector('#username');
 const create_account_btn =  base.querySelector('#create-account-btn');
-//const username_submit = base.querySelector('.username-submit');
 
 
 // ---------------------------------
@@ -110,13 +109,7 @@ async function handle_submit(event) {
 	const name = name_input.value;
 	const username = username_input.value;
 
-	if(form_is_valid) {
-		create_user();
-		return;
-	}
-
 	if(form_is_valid && camera.has_valid_video) {
-		
 	} else {
 		display_form_validity_message();
 	}
@@ -173,8 +166,6 @@ async function create_uf2(event) {
 				'friendly_name': name,
 			}),
 		});
-
-		console.log(uf2.credential);
 	}
 	catch(error) {
 		display_form_validity_message(error.message)
