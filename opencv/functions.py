@@ -16,16 +16,6 @@ def detect_faces(img):
 	return detector(img);
 
 @staticmethod
-def mark_faces(img, faces):
-	for face in faces:
-		x = face.left();
-		y = face.top();
-		x2 = face.right();
-		y2 = face.bottom();
-		cv.rectangle(img, (x, y), (x2,y2), (0, 255, 0), 2);
-	return img;
-
-@staticmethod
 def crop_face(img, face, pad):
 	x = face.left();
 	y = face.top();
@@ -49,12 +39,6 @@ def convert_video_to_images(user_id):
 	filename = os.path.join(video_path, f'{user_id}_video.webm');
 	video = cv.VideoCapture(filename);
 
-@staticmethod
-def get_user_id(username):
-	users = get_users();
-	return users[username];
-
-@staticmethod
 	if not os.path.exists(image_path):
 		os.makedirs(image_path);
 	
