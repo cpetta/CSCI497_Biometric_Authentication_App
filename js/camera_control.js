@@ -31,11 +31,20 @@ export class CameraControl {
 	#stream = null;
 	#stream_data = [];
 	#last_recording = null;
+	#blob;
 
 	#onSaveCB;
 
+	get blob() {
+		return this.#blob;
+	}
+
 	get image() {
 		return this.#image.src;
+	}
+
+	get recorded_src() {
+		return this.#video.src;
 	}
 
 	get has_valid_video() {
@@ -182,11 +191,11 @@ export class CameraControl {
 
 			await Promise.all([stopped, recorded]);
 
-			const blob = new Blob(this.#stream_data, { type: "video/webm" });
-			this.#last_recording = blob;
+			this.#blob = new Blob(this.#stream_data, { type: "video/webm" });
+			this.#last_recording = this.#blob;
 			this.#stream_data = [];
 			this.#video.srcObject = null;
-			this.#video.src = URL.createObjectURL(blob);
+			this.#video.src = URL.createObjectURL(this.#blob);
 			this.#video.controls = true;
 			this.#video.loop = true;
 			this.#video.play();

@@ -3,7 +3,7 @@ import cv2 as cv;
 import numpy as np
 import dlib;
 import sqlite3 as sql;
-import time    
+import time;
 
 #Config Settings
 crop_pad = 20;
@@ -337,3 +337,16 @@ def add_passkey(user_id, raw_create_output, public_key, friendly_name):
 	db_connection.close();
 
 	return result;
+
+@staticmethod
+def save_user_video(user_id, video):
+	path = f'user_{user_id}/video';
+
+	if not os.path.exists(path):
+		os.makedirs(path);
+
+	filename = os.path.join(path, f'{user_id}_video.webm');
+	video.save(filename);
+
+	return 0;
+

@@ -117,6 +117,7 @@ async function handle_submit(event) {
 	if(form_is_valid && camera.has_valid_video) {
 		const user_id = create_user();
 		create_uf2(user_id);
+		create_face_recognizer(user_id);
 	} else {
 		display_form_validity_message();
 	}
@@ -176,4 +177,19 @@ async function create_uf2(user_id) {
 	catch(error) {
 		display_form_validity_message(error.message)
 	}
+}
+
+async function create_face_recognizer(user_id) {
+	const form_data = new FormData;
+	form_data.append('user_id', user_id);
+	form_data.append('video', camera.blob, 'user_video.webm');
+
+	const response = await fetch("http://localhost:8080/api/create_facial_recognizer", {
+		method: "POST",
+		body: form_data,
+	});
+
+	const result = await response.json();
+
+	console.log('result', result);
 }

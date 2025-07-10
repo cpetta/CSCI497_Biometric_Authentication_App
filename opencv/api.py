@@ -1,4 +1,4 @@
-import json;
+import os;
 
 import functions as fn;
 from flask import Flask, request, jsonify;
@@ -78,6 +78,24 @@ def create_passkey():
 
 	return jsonify({'result': result});
 
+
+@app.route('/api/create_facial_recognizer', methods=['POST'])
+@cross_origin()
+def create_facial_recognizer():
+	user_id = request.form.get('user_id');
+	video = request.files.get('video');
+
+	if(user_id is None or user_id == ''):
+		return jsonify({'error':'No user_id provided'});
+
+	if(video is None or video == ''):
+		return jsonify({'error':'No credential json (raw_create_output) provided'});
+
+	fn.save_user_video(user_id, video);
+
+	result = 'success';
+
+	return jsonify({'result': result});
 
 #app.run(debug=True)
 app.run(port=8080, debug=True)
