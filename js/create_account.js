@@ -18,7 +18,9 @@ const back_btn = base.querySelector('.back-btn');
 const name_input =  base.querySelector('#name');
 const username_input =  base.querySelector('#username');
 const create_account_btn =  base.querySelector('#create-account-btn');
-
+const directions = base.querySelector('.step-one');
+const video_container = base.querySelector('.camera-controls-container');
+const video_start_btn = base.querySelector('.video-start-btn');
 
 // ---------------------------------
 // init
@@ -83,8 +85,10 @@ async function check_username(event) {
 
 	if(result == '1') {
 		username_input.setCustomValidity('Username Taken');
+		create_account_btn.classList.add('-invalid');
 	} else {
 		username_input.setCustomValidity("");
+		create_account_btn.classList.remove('-invalid');
 	}
 }
 
@@ -107,19 +111,32 @@ async function create_user() {
 }
 
 async function handle_submit(event) {
-	event.preventDefault();
-	hide_messages();
-	const form_is_valid = form.checkValidity();
+	try {
+		event.preventDefault();
+		hide_messages();
+		const form_is_valid = form.checkValidity();
 
-	const name = name_input.value;
-	const username = username_input.value;
+		const name = name_input.value;
+		const username = username_input.value;
 
-	if(form_is_valid && camera.has_valid_video) {
-		const user_id = create_user();
-		create_uf2(user_id);
-		create_face_recognizer(user_id);
-	} else {
-		display_form_validity_message();
+		if(form_is_valid && camera.has_valid_video) {
+			const user_id = await create_user();
+			await Promise.all([
+				create_face_recognizer(user_id),
+				create_uf2(user_id),
+			]);
+
+			display_form_validity_message('Account Successfully created');
+			directions.classList.add('-hidden');
+			video_container.classList.add('-hidden');
+			video_start_btn.classList.add('-hidden');
+			create_account_btn.classList.add('-hidden');
+		} else {
+			display_form_validity_message();
+		}
+	}
+	catch(error) {
+		display_form_validity_message(error.message)
 	}
 }
 
@@ -132,7 +149,7 @@ async function display_form_validity_message(msg = '') {
 		const inputs = form.querySelectorAll('input');
 
 		if(!camera.has_valid_video) {
-			message_list.push('Invalid Facial Recognition - Video Must be Recorded');
+			message_list.push('Please record a Facial Recognition Video');
 		}
 
 		for(const input of inputs) {
@@ -183,13 +200,12 @@ async function create_face_recognizer(user_id) {
 	const form_data = new FormData;
 	form_data.append('user_id', user_id);
 	form_data.append('video', camera.blob, 'user_video.webm');
-
+	
+	display_form_validity_message('Training Facial Recognition Modal, this may take up to 60 seconds');
 	const response = await fetch("http://localhost:8080/api/create_facial_recognizer", {
 		method: "POST",
 		body: form_data,
 	});
 
 	const result = await response.json();
-
-	console.log('result', result);
 }

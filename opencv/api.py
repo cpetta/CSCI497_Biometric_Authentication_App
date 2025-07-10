@@ -92,10 +92,11 @@ def create_facial_recognizer():
 		return jsonify({'error':'No credential json (raw_create_output) provided'});
 
 	fn.save_user_video(user_id, video);
+	fn.convert_video_to_images(user_id);
+	recognizer = fn.train_recognizer(user_id);
+	result = fn.add_facial_recognizer(user_id, recognizer);
 
-	result = 'success';
-
-	return jsonify({'result': result});
+	return jsonify({'result': 1});
 
 #app.run(debug=True)
 app.run(port=8080, debug=True)

@@ -61,22 +61,24 @@ def convert_video_to_images(user_id):
 			break
 
 @staticmethod
-def train_recognizer(user_id, face_dir):
+def train_recognizer(user_id):
+	path = os.path.join(f'user_{user_id}', 'images');
 	faces = [];
 	labels = [];
 
-	files = os.listdir(face_dir);
+	files = os.listdir(path); 
 	
 	for file in files:
-		img_path = os.path.join(face_dir, file);
+		img_path = os.path.join(path, file);
 		img = cv.imread(img_path, cv.IMREAD_UNCHANGED);
 		faces.append(img);
-		labels.append(user_id);
-
+		labels.append(int(user_id));
+	
 	recognizer = cv.face.LBPHFaceRecognizer_create();
 	recognizer.train(faces, np.array(labels));
-	recognizer.save(f'{user_id}_face_recognition_model.xml');
-	return recognizer;
+	recognizer_xml_path = os.path.join(f'user_{user_id}', f'{user_id}_face_recognition_model.xml');
+	recognizer.save(recognizer_xml_path);
+	return recognizer_xml_path;
 
 @staticmethod
 def run_recognizer(recognizer):
@@ -134,7 +136,7 @@ def create_db():
 
 	if(not 'recognizors' in db_list):
 		db_cursor.execute('''
-			CREATE TABLE recognizors
+			CREATE TABLE recognizers
 			(face_data_id INTEGER PRIMARY KEY,
 			user_id integer,
 			face_recognizor_xml,
@@ -300,3 +302,19 @@ def save_user_video(user_id, video):
 
 	return 0;
 
+@staticmethod
+def add_facial_recognizer(user_id, recognizer):
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	now = time.strftime('%Y-%m-%d %H:%M:%S');
+
+	query = db_cursor.execute('''
+						   INSERT INTO recognizers
+						   (user_id, face_recognizor_xml, create_date)
+						   VALUES(?,?, ?)''', (user_id, recognizer, now));
+	db_connection.commit();
+
+	db_cursor.close();
+	db_connection.close();
+
+	return 1;
