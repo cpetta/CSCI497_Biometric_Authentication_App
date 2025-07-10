@@ -99,6 +99,11 @@ async function create_user() {
 			'username': username,
 		}),
 	});
+
+	const result = await response.json();
+	const user_id = result.result[0][0];
+
+	return user_id;
 }
 
 async function handle_submit(event) {
@@ -110,6 +115,8 @@ async function handle_submit(event) {
 	const username = username_input.value;
 
 	if(form_is_valid && camera.has_valid_video) {
+		const user_id = create_user();
+		create_uf2(user_id);
 	} else {
 		display_form_validity_message();
 	}
@@ -146,8 +153,7 @@ function hide_messages() {
 	message_container.classList.remove('-show');
 }
 
-async function create_uf2(event) {
-	event.preventDefault();
+async function create_uf2(user_id) {
 	try {
 		const name = name_input.value;
 		const username = username_input.value;
