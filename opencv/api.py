@@ -26,6 +26,17 @@ def get_user():
 
 	return jsonify({'result': result});
 
+@app.route('/api/user-exists', methods=['POST'])
+def get_user_exists():
+	user_name = request.form.get('username');
+	
+	if(user_name is None):
+		return jsonify({'error':'No username provided'});
+
+	result = fn.check_user_exists(user_name);
+
+	return jsonify({'result': result});
+
 @app.route('/api/user', methods=['POST'])
 @cross_origin()
 def add_user():
@@ -42,16 +53,6 @@ def add_user():
 
 	return jsonify({'result': result});
 
-@app.route('/api/user-exists', methods=['POST'])
-def get_user_exists():
-	user_name = request.form.get('username');
-	
-	if(user_name is None):
-		return jsonify({'error':'No username provided'});
-
-	result = fn.check_user_exists(user_name);
-
-	return jsonify({'result': result});
 
 @app.route('/api/create_passkey', methods=['POST'])
 @cross_origin()
