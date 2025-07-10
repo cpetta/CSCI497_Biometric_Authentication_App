@@ -1,6 +1,7 @@
 "use-strict";
 import { load_view } from './js/page_loader.js';
 import { CameraControl } from './js/camera_control.js';
+import { UF2 } from './js/uf2.js';
 
 // ---------------------------------
 // Config
@@ -24,6 +25,7 @@ const create_account_btn =  base.querySelector('#create-account-btn');
 // init
 // ---------------------------------
 let delay_check;
+const uf2 = new UF2();
 const camera = new CameraControl();
 
 // ---------------------------------
@@ -105,27 +107,39 @@ async function handle_submit(event) {
 	hide_messages();
 	const form_is_valid = form.checkValidity();
 
-	if(form_is_valid && video_is_valid) {
+	const name = name_input.value;
+	const username = username_input.value;
+
+	if(form_is_valid) {
 		create_user();
+		return;
+	}
+
+	if(form_is_valid && camera.has_valid_video) {
+		
 	} else {
 		display_form_validity_message();
 	}
 }
 
-async function display_form_validity_message() {
-	const inputs = form.querySelectorAll('input');
-	
+async function display_form_validity_message(msg = '') {
 	const message_list = [];
 
-	if(!camera.has_valid_video) {
-		message_list.push('Invalid Facial Recognition - Video Must be Recorded');
-	}
+	if(msg) {
+		message_list.push(msg);
+	} else {
+		const inputs = form.querySelectorAll('input');
 
-	for(const input of inputs) {
-		if(!input.checkValidity()) {
-			const label = input.closest('label')?.innerText;
-			const message = input.validationMessage;
-			message_list.push(`Invalid ${label} Entered - ${message}`);
+		if(!camera.has_valid_video) {
+			message_list.push('Invalid Facial Recognition - Video Must be Recorded');
+		}
+
+		for(const input of inputs) {
+			if(!input.checkValidity()) {
+				const label = input.closest('label')?.innerText;
+				const message = input.validationMessage;
+				message_list.push(`Invalid ${label} Entered - ${message}`);
+			}
 		}
 	}
 
@@ -137,4 +151,32 @@ async function display_form_validity_message() {
 function hide_messages() {
 	message_container.classList.add('-hidden');
 	message_container.classList.remove('-show');
+}
+
+async function create_uf2(event) {
+	event.preventDefault();
+	try {
+		const name = name_input.value;
+		const username = username_input.value;
+	
+		await uf2.create({
+			name: username,
+			displayName: name,
+		});
+
+		const response = await fetch("http://127.0.0.1:8080/api/create_passkey", {
+			method: "POST",
+			body: new URLSearchParams({
+				'user_id': 1,
+				'raw_create_output': uf2.toJSON(),
+				'public_key': uf2.public_key,
+				'friendly_name': name,
+			}),
+		});
+
+		console.log(uf2.credential);
+	}
+	catch(error) {
+		display_form_validity_message(error.message)
+	}
 }

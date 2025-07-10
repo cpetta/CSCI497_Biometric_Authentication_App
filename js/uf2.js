@@ -1,7 +1,7 @@
 export class UF2 {
 	#challenge;
 	#rp = {
-		id: "cpetta.github.io",
+		id: window.location.host,
 		name: "CSCI497 - Biometric Authentication App",
 	};
 
@@ -13,6 +13,10 @@ export class UF2 {
 
 	get credential() {
 		return this.#credential;
+	}
+
+	get public_key() {
+		return this.#credential.toJSON().response.publicKey;
 	}
 
 	constructor(args = {}) {
@@ -38,5 +42,9 @@ export class UF2 {
 			pubKeyCredParams: [{ type: "public-key", alg: -7 }],
 			},
 		});
+	}
+
+	toJSON() {
+		return JSON.stringify(this.#credential);
 	}
 }

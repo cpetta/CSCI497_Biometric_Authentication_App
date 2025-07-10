@@ -185,7 +185,7 @@ def create_db():
 	if(not 'recognizors' in db_list):
 		db_cursor.execute('''
 			CREATE TABLE recognizors
-			(face_data_id integer auto_increment primary key,
+			(face_data_id INTEGER PRIMARY KEY,
 			user_id integer,
 			face_recognizor_xml,
 			create_date DEFALT CURRENT_TIMESTAMP)''');
@@ -193,8 +193,9 @@ def create_db():
 	if(not 'user_passkeys' in db_list):
 		db_cursor.execute('''
 		CREATE TABLE user_passkeys
-		(credential_id integer auto_increment primary key,
+		(credential_id INTEGER PRIMARY KEY,
 		user_id integer,
+		raw_create_output varchar(500),
 		public_key varchar(200),
 		counter integer,
 		friendly_name varchar(200),
@@ -262,6 +263,21 @@ def get_user(username):
 	return result;
 
 @staticmethod
+def get_passkeys(user_id):
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	
+	args = [(user_id)];
+	query = db_cursor.execute('SELECT * FROM user_passkeys where user_id=?', (args));
+	result = query.fetchall();
+	
+	db_cursor.close();
+	db_connection.close();
+
+	return result;
+
+
+@staticmethod
 def check_user_exists(username):
 	if(username is None):
 		raise ValueError('The get_user function expects a username argument')
@@ -297,6 +313,25 @@ def add_user(name, username):
 	db_connection.commit();
 
 	result = get_user(username);
+	
+	db_cursor.close();
+	db_connection.close();
+
+	return result;
+
+@staticmethod
+def add_passkey(user_id, raw_create_output, public_key, friendly_name):
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	now = time.strftime('%Y-%m-%d %H:%M:%S');
+
+	query = db_cursor.execute('''
+						   INSERT INTO user_passkeys
+						   (user_id, raw_create_output, public_key, counter, friendly_name, create_date)
+						   VALUES(?,?,?,?,?,?)''', (user_id, raw_create_output, public_key, 0, friendly_name, now));
+	db_connection.commit();
+
+	result = get_user(user_id);
 	
 	db_cursor.close();
 	db_connection.close();

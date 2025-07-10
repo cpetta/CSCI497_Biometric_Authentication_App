@@ -53,5 +53,30 @@ def get_user_exists():
 
 	return jsonify({'result': result});
 
+@app.route('/api/create_passkey', methods=['POST'])
+@cross_origin()
+def create_passkey():
+	user_id = request.form.get('user_id');
+	raw_create_output = request.form.get('raw_create_output');
+	public_key = request.form.get('public_key');
+	friendly_name = request.form.get('friendly_name');
+	
+	if(user_id is None or user_id == ''):
+		return jsonify({'error':'No user_id provided'});
+
+	if(raw_create_output is None or raw_create_output == ''):
+		return jsonify({'error':'No credential json (raw_create_output) provided'});
+
+	if(public_key is None or public_key == ''):
+		return jsonify({'error':'No user_id provided'});
+
+	if(friendly_name is None or friendly_name == ''):
+		return jsonify({'error':'No friendly_name provided'});
+
+	result = fn.add_passkey(user_id, raw_create_output, public_key, friendly_name);
+
+	return jsonify({'result': result});
+
+
 #app.run(debug=True)
 app.run(port=8080, debug=True)
