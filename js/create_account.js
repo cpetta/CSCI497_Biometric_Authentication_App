@@ -184,7 +184,7 @@ async function create_uf2(user_id) {
 		const response = await fetch("http://localhost:8080/api/create_passkey", {
 			method: "POST",
 			body: new URLSearchParams({
-				'user_id': 1,
+				'user_id': user_id,
 				'raw_create_output': uf2.toJSON(),
 				'public_key': uf2.public_key,
 				'friendly_name': name,
