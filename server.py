@@ -145,4 +145,3 @@ def run_facial_recognizer():
 
 #app.run(debug=True)
 app.run(port=8080, debug=True);
-input("Press Enter to continue...")
