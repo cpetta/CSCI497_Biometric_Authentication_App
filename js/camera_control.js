@@ -34,6 +34,7 @@ export class CameraControl {
 	#blob;
 
 	#onSaveCB;
+	#onRecordingFinishedCB;
 
 	get blob() {
 		return this.#blob;
@@ -56,6 +57,7 @@ export class CameraControl {
 	// ---------------------------------
 	constructor(args = {}) {
 		this.#onSaveCB = args?.onSaveCB ?? function() {};
+		this.#onRecordingFinishedCB = args?.onRecordingFinished ?? function() {};
 
 		this.#video.addEventListener("canplay", this.handle_video_canplay.bind(this));
 		this.#start_btn.addEventListener('click', this.start_camera.bind(this), false);
@@ -200,6 +202,7 @@ export class CameraControl {
 			this.#video.loop = true;
 			this.#video.play();
 			this.#start_recording_btn.classList.remove('-recording');
+			this.#onRecordingFinishedCB();
 		}
 		catch(error) {
 			if (error.name === "NotFoundError") {
