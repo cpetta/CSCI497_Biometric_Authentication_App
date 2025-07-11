@@ -27,3 +27,5 @@ dist-ssr
 *.xml
 *.db
 *.webm
+*.spec
+/build

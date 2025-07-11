@@ -9,6 +9,8 @@ app = Flask(__name__);
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
+fn.create_db();
+
 @app.route('/api/setup', methods=['GET'])
 def setup():
 	return jsonify({
@@ -142,4 +144,5 @@ def run_facial_recognizer():
 	return jsonify({'result': result});
 
 #app.run(debug=True)
-app.run(port=8080, debug=True)
+app.run(port=8080, debug=True);
+input("Press Enter to continue...")
