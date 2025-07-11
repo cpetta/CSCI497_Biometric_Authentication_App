@@ -37,6 +37,19 @@ def get_user_exists():
 
 	return jsonify({'result': result});
 
+@app.route('/api/passkey_signin_request', methods=['POST'])
+@cross_origin()
+def get_passkey():
+	user_id = request.form.get('user_id');
+	
+	if(user_id is None or user_id == ''):
+		return jsonify({'error':'No user_id provided'});
+
+	result = fn.get_passkeys(user_id);
+
+	return jsonify({'result': result});
+
+
 @app.route('/api/user', methods=['POST'])
 @cross_origin()
 def add_user():
@@ -89,7 +102,7 @@ def create_facial_recognizer():
 		return jsonify({'error':'No user_id provided'});
 
 	if(video is None or video == ''):
-		return jsonify({'error':'No credential json (raw_create_output) provided'});
+		return jsonify({'error':'No video provided'});
 
 	fn.save_user_video(user_id, video);
 	fn.convert_video_to_images(user_id);
