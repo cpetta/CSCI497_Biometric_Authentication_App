@@ -35,6 +35,11 @@ export class CameraControl {
 
 	#onSaveCB;
 	#onRecordingFinishedCB;
+	#showRecording = true;
+
+	set onRecordingFinishedCB(fn) {
+		this.#onRecordingFinishedCB = fn;
+	}
 
 	get blob() {
 		return this.#blob;
@@ -58,7 +63,8 @@ export class CameraControl {
 	constructor(args = {}) {
 		this.#onSaveCB = args?.onSaveCB ?? function() {};
 		this.#onRecordingFinishedCB = args?.onRecordingFinished ?? function() {};
-
+		this.#showRecording = args?.showRecording ?? this.#showRecording;
+		
 		this.#video.addEventListener("canplay", this.handle_video_canplay.bind(this));
 		this.#start_btn.addEventListener('click', this.start_camera.bind(this), false);
 		this.#picture_btn?.addEventListener('click', this.take_picture.bind(this), false);
@@ -196,11 +202,15 @@ export class CameraControl {
 			this.#blob = new Blob(this.#stream_data, { type: "video/webm" });
 			this.#last_recording = this.#blob;
 			this.#stream_data = [];
-			this.#video.srcObject = null;
-			this.#video.src = URL.createObjectURL(this.#blob);
-			this.#video.controls = true;
-			this.#video.loop = true;
-			this.#video.play();
+			
+			if(this.#showRecording) {
+				this.#video.srcObject = null;
+				this.#video.src = URL.createObjectURL(this.#blob);
+				this.#video.controls = true;
+				this.#video.loop = true;
+				this.#video.play();
+			}
+			
 			this.#start_recording_btn.classList.remove('-recording');
 			this.#onRecordingFinishedCB();
 		}
