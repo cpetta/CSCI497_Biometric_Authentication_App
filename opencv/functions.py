@@ -81,11 +81,14 @@ def train_recognizer(user_id):
 	return recognizer_xml_path;
 
 @staticmethod
-def run_recognizer(recognizer):
-	cap = cv.VideoCapture(0);
+def run_recognizer(recognizer_file, video):
+	cap = cv.VideoCapture(video);
 
-	label_name = {value: key for key, value in get_users().items()};
-	while True:
+	recognizer = cv.face.LBPHFaceRecognizer_create();
+	recognizer.read(recognizer_file);
+	overall_confidence = 0;
+	
+	for i in range(20):
 		ret, frame = cap.read();
 		img = cv.cvtColor(frame, cv.COLOR_BGR2GRAY);
 		img = cv.equalizeHist(img);
@@ -95,29 +98,13 @@ def run_recognizer(recognizer):
 			continue;
 
 		face = faces[0];
-		
-		x = face.left();
-		y = face.top();
-		x2 = face.right();
-		y2 = face.bottom();
 		img = crop_face(img, face, 0);
 
 		label, confidence = recognizer.predict(img);
-		p = round(confidence);
-
-		cv.rectangle(frame, (x, y), (x2,y2), (0, 255, 0), 2);
-
-		detected_person = f'unknown - {p}';
-		if p > 50:
-			detected_person = f'{label_name[label]} - {p}';
+		overall_confidence += confidence;
 		
-		cv.putText(frame, detected_person, (x, y - 10), cv.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2);
-		cv.imshow('Recognize Faces', frame);
-
-		if cv.waitKey(1) & 0xFF == ord('q'):
-			break
-	cap.release()
-	cv.destroyAllWindows()
+	overall_confidence = round(overall_confidence / i);
+	return overall_confidence
 
 @staticmethod
 def create_db():
@@ -215,6 +202,22 @@ def get_user(username):
 	return result;
 
 @staticmethod
+def get_username(user_id):
+	if(user_id is None):
+		raise ValueError('The get_username function expects a user_id argument')
+	
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	args = [(user_id)];
+	query = db_cursor.execute('SELECT user_name FROM users where user_id=?', (args));
+	result = query.fetchall();
+	
+	db_cursor.close();
+	db_connection.close();
+
+	return result[0][0];
+
+@staticmethod
 def get_passkeys(user_id):
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
@@ -228,6 +231,17 @@ def get_passkeys(user_id):
 
 	return result;
 
+@staticmethod
+def get_facial_recognizers():
+	db_connection = sql.connect(db_name);
+	db_cursor = db_connection.cursor();
+	query = db_cursor.execute('SELECT * FROM recognizers');
+	result = query.fetchall();
+	
+	db_cursor.close();
+	db_connection.close();
+
+	return result;
 
 @staticmethod
 def check_user_exists(username):
@@ -300,7 +314,7 @@ def save_user_video(user_id, video):
 	filename = os.path.join(path, f'{user_id}_video.webm');
 	video.save(filename);
 
-	return 0;
+	return filename;
 
 @staticmethod
 def add_facial_recognizer(user_id, recognizer):

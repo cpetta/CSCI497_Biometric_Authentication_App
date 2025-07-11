@@ -98,5 +98,35 @@ def create_facial_recognizer():
 
 	return jsonify({'result': 1});
 
+@app.route('/api/run_facial_recognizer', methods=['POST'])
+@cross_origin()
+def run_facial_recognizer():
+	video = request.files.get('video');
+
+	if(video is None or video == ''):
+		return jsonify({'error':'No video provided'});
+
+	video_file = fn.save_user_video(0, video);
+	recognizers = fn.get_facial_recognizers();
+	
+	result = [];
+
+	for recognizer in recognizers:
+		user_id = recognizer[1];
+		user_name = fn.get_username(user_id);
+		recognizer_xml = recognizer[2];
+
+		if not os.path.exists(recognizer_xml):
+			continue;
+
+		confidence = fn.run_recognizer(recognizer_xml, video_file);
+		result.append({
+			'username':user_name,
+			'id': user_id,
+			'confidence': confidence
+		});
+	
+	return jsonify({'result': result});
+
 #app.run(debug=True)
 app.run(port=8080, debug=True)
