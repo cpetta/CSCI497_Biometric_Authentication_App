@@ -126,21 +126,21 @@ async function handle_submit(event) {
 				create_uf2(user_id),
 			]);
 
-			display_form_validity_message('Account Successfully created');
+			display_message('Account Successfully created');
 			directions.classList.add('-hidden');
 			video_container.classList.add('-hidden');
 			video_start_btn.classList.add('-hidden');
 			create_account_btn.classList.add('-hidden');
 		} else {
-			display_form_validity_message();
+			display_message();
 		}
 	}
 	catch(error) {
-		display_form_validity_message(error.message)
+		display_message(error.message)
 	}
 }
 
-async function display_form_validity_message(msg = '') {
+async function display_message(msg = '') {
 	const message_list = [];
 
 	if(msg) {
@@ -192,7 +192,7 @@ async function create_uf2(user_id) {
 		});
 	}
 	catch(error) {
-		display_form_validity_message(error.message)
+		display_message(error.message)
 	}
 }
 
@@ -201,7 +201,7 @@ async function create_face_recognizer(user_id) {
 	form_data.append('user_id', user_id);
 	form_data.append('video', camera.blob, 'user_video.webm');
 	
-	display_form_validity_message('Training Facial Recognition Modal, this may take up to 60 seconds');
+	display_message('Training Facial Recognition Modal, this may take up to 60 seconds');
 	const response = await fetch("http://localhost:8080/api/create_facial_recognizer", {
 		method: "POST",
 		body: form_data,
