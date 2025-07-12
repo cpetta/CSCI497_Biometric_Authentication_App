@@ -1,10 +1,11 @@
 import os;
-
 import functions as fn;
+import threading;
+import webbrowser;
+
 from flask import Flask, request, jsonify;
-from flask_cors import CORS, cross_origin
-from http.server import SimpleHTTPRequestHandler, HTTPServer as BaseHTTPServer
-import threading
+from flask_cors import CORS, cross_origin;
+from http.server import SimpleHTTPRequestHandler, HTTPServer as BaseHTTPServer;
 
 path = 'api';
 app = Flask(__name__);
@@ -168,8 +169,8 @@ def run_api():
 		print('Run API experienced an error');
 
 thread1 = threading.Thread(target=run_base_web_server);
-# thread2 = threading.Thread(target=run_api);
+thread2 = threading.Thread(target=run_api);
 
 thread1.start();
-# thread2.start();
-app.run(port=8080, debug=True);
+thread2.start();
+webbrowser.open('http://localhost', new=2);
