@@ -3,13 +3,34 @@ import os;
 import functions as fn;
 from flask import Flask, request, jsonify;
 from flask_cors import CORS, cross_origin
+from http.server import SimpleHTTPRequestHandler, HTTPServer as BaseHTTPServer
+import threading
 
 path = 'api';
 app = Flask(__name__);
 cors = CORS(app)
-app.config['CORS_HEADERS'] = 'Content-Type'
+app.config['CORS_HEADERS'] = 'Content-Type';
 
 fn.create_db();
+
+# Referenced https://stackoverflow.com/questions/73089846/python-3-simple-http-server-with-get-functional
+def run_base_web_server():
+	class HTTPHandler(SimpleHTTPRequestHandler):
+		def translate_path(self, path):
+			path = SimpleHTTPRequestHandler.translate_path(self, path)
+			relpath = os.path.relpath(path, os.getcwd())
+			fullpath = os.path.join(self.server.base_path, relpath)
+			return fullpath
+
+
+	class HTTPServer(BaseHTTPServer):
+		def __init__(self, base_path, server_address, RequestHandlerClass=HTTPHandler):
+			self.base_path = base_path
+			BaseHTTPServer.__init__(self, server_address, RequestHandlerClass)
+
+	httpd = HTTPServer(os.path.dirname(__file__), ("localhost", 80))
+	print('Base web server started at localhost port 80')
+	httpd.serve_forever();
 
 @app.route('/api/setup', methods=['GET'])
 def setup():
@@ -51,7 +72,6 @@ def get_passkey():
 
 	return jsonify({'result': result});
 
-
 @app.route('/api/user', methods=['POST'])
 @cross_origin()
 def add_user():
@@ -67,7 +87,6 @@ def add_user():
 	result = fn.add_user(name, user_name);
 
 	return jsonify({'result': result});
-
 
 @app.route('/api/create_passkey', methods=['POST'])
 @cross_origin()
@@ -92,7 +111,6 @@ def create_passkey():
 	result = fn.add_passkey(user_id, raw_create_output, public_key, friendly_name);
 
 	return jsonify({'result': result});
-
 
 @app.route('/api/create_facial_recognizer', methods=['POST'])
 @cross_origin()
@@ -143,5 +161,15 @@ def run_facial_recognizer():
 	
 	return jsonify({'result': result});
 
-#app.run(debug=True)
+def run_api():
+	try:
+		app.run(port=8080, debug=False);
+	except:
+		print('Run API experienced an error');
+
+thread1 = threading.Thread(target=run_base_web_server);
+# thread2 = threading.Thread(target=run_api);
+
+thread1.start();
+# thread2.start();
 app.run(port=8080, debug=True);
