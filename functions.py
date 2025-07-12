@@ -42,9 +42,15 @@ def convert_video_to_images(user_id):
 	if not os.path.exists(image_path):
 		os.makedirs(image_path);
 	
-	i = 0;
-	while True:
+	i = 0
+	for f in range(100):
 		ret, frame = video.read();
+		
+		print(f'Processing frame: {f} - detected faces: {i}');
+
+		if(not isinstance(frame, np.ndarray)):
+			break;
+		
 		gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY);
 		gray = cv.equalizeHist(gray);
 		faces = detect_faces(gray);
@@ -55,10 +61,7 @@ def convert_video_to_images(user_id):
 		img_gray = crop_face(gray, faces[0], 0);
 		image_file = os.path.join(image_path, f'{i}.jpg');
 		cv.imwrite(image_file, img_gray);
-		i += 1
-
-		if i > 100:
-			break
+		i += 1;
 
 @staticmethod
 def train_recognizer(user_id):
@@ -68,7 +71,13 @@ def train_recognizer(user_id):
 
 	files = os.listdir(path); 
 	
+	if len(files) < 50:
+		return False;
+
+	i = 0;
 	for file in files:
+		i += 1;
+		print(f'Training with file {i}');
 		img_path = os.path.join(path, file);
 		img = cv.imread(img_path, cv.IMREAD_UNCHANGED);
 		faces.append(img);
@@ -88,8 +97,14 @@ def run_recognizer(recognizer_file, video):
 	recognizer.read(recognizer_file);
 	overall_confidence = 0;
 	
-	for i in range(20):
+	f = 0;
+	for i in range(5):
 		ret, frame = cap.read();
+		print(f'Processing frame: {i} - detected faces: {f}');
+
+		if(not isinstance(frame, np.ndarray)):
+			break;
+		
 		img = cv.cvtColor(frame, cv.COLOR_BGR2GRAY);
 		img = cv.equalizeHist(img);
 		faces = detect_faces(img);
@@ -101,10 +116,16 @@ def run_recognizer(recognizer_file, video):
 		img = crop_face(img, face, 0);
 
 		label, confidence = recognizer.predict(img);
+		print(f'frame facial recognition confidence: {confidence}');
 		overall_confidence += confidence;
-		
-	overall_confidence = round(overall_confidence / i);
-	return overall_confidence
+		f += 1
+	
+	if(f == 0):
+		return 0;
+
+	overall_confidence = round(overall_confidence / f) or 0;
+	print(f'Overall recognition confidence: {overall_confidence}');
+	return int(overall_confidence);
 
 @staticmethod
 def create_db():
@@ -214,8 +235,12 @@ def get_username(user_id):
 	
 	db_cursor.close();
 	db_connection.close();
-
-	return result[0][0];
+	print(f'get_username reault: {result}');
+	if isinstance(result, list) and len(result):
+		if isinstance(result, list) and len(result):
+			result[0][0];
+		result[0];
+	result;
 
 @staticmethod
 def get_passkeys(user_id):
@@ -235,7 +260,7 @@ def get_passkeys(user_id):
 def get_facial_recognizers():
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
-	query = db_cursor.execute('SELECT * FROM recognizers');
+	query = db_cursor.execute('SELECT DISTINCT * FROM recognizers');
 	result = query.fetchall();
 	
 	db_cursor.close();
@@ -332,3 +357,4 @@ def add_facial_recognizer(user_id, recognizer):
 	db_connection.close();
 
 	return 1;
+

@@ -128,6 +128,10 @@ def create_facial_recognizer():
 	fn.save_user_video(user_id, video);
 	fn.convert_video_to_images(user_id);
 	recognizer = fn.train_recognizer(user_id);
+
+	if(recognizer == False):
+		return jsonify({'error': 'Not enough facial data to create recognizer, please record a new video and try again.'});
+
 	result = fn.add_facial_recognizer(user_id, recognizer);
 
 	return jsonify({'result': 1});
@@ -143,24 +147,32 @@ def run_facial_recognizer():
 	video_file = fn.save_user_video(0, video);
 	recognizers = fn.get_facial_recognizers();
 	
-	result = [];
+	current_confidence = 0;
+	current_user_id = 0;
 
 	for recognizer in recognizers:
 		user_id = recognizer[1];
-		user_name = fn.get_username(user_id);
 		recognizer_xml = recognizer[2];
 
 		if not os.path.exists(recognizer_xml):
 			continue;
 
 		confidence = fn.run_recognizer(recognizer_xml, video_file);
-		result.append({
-			'username':user_name,
-			'id': user_id,
-			'confidence': confidence
-		});
+
+		print(current_confidence);
+		print(confidence);
+		if(current_confidence < confidence):
+			current_confidence = confidence;
+			current_user_id = user_id;
 	
-	return jsonify({'result': result});
+
+	user_name = fn.get_username(user_id);
+
+	return jsonify({
+		'user_id': current_user_id,
+		'user_name': user_name,
+		'confidence': current_confidence
+	});
 
 def run_api():
 	try:
@@ -169,8 +181,9 @@ def run_api():
 		print('Run API experienced an error');
 
 thread1 = threading.Thread(target=run_base_web_server);
-thread2 = threading.Thread(target=run_api);
+# thread2 = threading.Thread(target=run_api);
 
 thread1.start();
-thread2.start();
+# thread2.start();
 webbrowser.open('http://localhost', new=2);
+app.run(port=8080, debug=True);

@@ -121,10 +121,16 @@ async function handle_submit(event) {
 
 		if(form_is_valid && camera.has_valid_video) {
 			const user_id = await create_user();
+			let face_data = create_face_recognizer(user_id);
 			await Promise.all([
-				create_face_recognizer(user_id),
+				face_data,
 				create_uf2(user_id),
-			]);
+			]);			
+			const face_result = await face_data;
+
+			if(await face_result?.error) {
+				throw new Error(face_result.error);
+			}
 
 			display_message('Account Successfully created');
 			directions.classList.add('-hidden');
@@ -208,4 +214,5 @@ async function create_face_recognizer(user_id) {
 	});
 
 	const result = await response.json();
+	return result;
 }
