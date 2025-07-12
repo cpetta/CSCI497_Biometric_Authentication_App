@@ -121,7 +121,7 @@ def create_db():
 			user_name,
 			create_date DEFALT CURRENT_TIMESTAMP NOT NULL)''');
 
-	if(not 'recognizors' in db_list):
+	if(not 'recognizers' in db_list):
 		db_cursor.execute('''
 			CREATE TABLE recognizers
 			(face_data_id INTEGER PRIMARY KEY,
