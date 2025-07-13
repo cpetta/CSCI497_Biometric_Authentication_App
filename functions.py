@@ -11,6 +11,13 @@ db_name = 'csci497_biometric_auth_app.db'
 user_data_dir = 'user_data';
 
 @staticmethod
+def init():
+	delete_db();
+	create_db();
+	if not os.path.exists(user_data_dir):
+		os.makedirs(user_data_dir);
+
+@staticmethod
 def detect_faces(img):
 	detector = dlib.get_frontal_face_detector();
 	return detector(img);
@@ -131,7 +138,6 @@ def run_recognizer(recognizer_file, video):
 def create_db():
 	db_connection = sql.connect(db_name);
 	db_cursor = db_connection.cursor();
-	delete_db();
 	db_list = get_db_list();
 
 	if(not 'users' in db_list):

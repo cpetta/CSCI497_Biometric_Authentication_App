@@ -12,7 +12,7 @@ app = Flask(__name__);
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type';
 
-fn.create_db();
+fn.init();
 
 # Referenced https://stackoverflow.com/questions/73089846/python-3-simple-http-server-with-get-functional
 def run_base_web_server():
