@@ -70,6 +70,9 @@ def convert_video_to_images(user_id):
 		cv.imwrite(image_file, img_gray);
 		i += 1;
 
+		if(i > 10):
+			break;
+
 @staticmethod
 def train_recognizer(user_id):
 	user_path = os.path.join(user_data_dir, f'user_{user_id}');
@@ -79,7 +82,7 @@ def train_recognizer(user_id):
 
 	files = os.listdir(path); 
 	
-	if len(files) < 50:
+	if len(files) < 10:
 		return False;
 
 	i = 0;
