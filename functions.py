@@ -248,9 +248,9 @@ def get_username(user_id):
 	print(f'get_username reault: {result}');
 	if isinstance(result, list) and len(result):
 		if isinstance(result, list) and len(result):
-			result[0][0];
-		result[0];
-	result;
+			return result[0][0];
+		return result[0];
+	return result;
 
 @staticmethod
 def get_passkeys(user_id):
