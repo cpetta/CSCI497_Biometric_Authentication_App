@@ -245,7 +245,7 @@ def get_username(user_id):
 	
 	db_cursor.close();
 	db_connection.close();
-	print(f'get_username reault: {result}');
+	
 	if isinstance(result, list) and len(result):
 		if isinstance(result, list) and len(result):
 			return result[0][0];

@@ -35,10 +35,15 @@ async function recognize_face() {
 	});
 
 	const result = await response.json();
-	console.log(result);
-	const username = result?.user_name || 'unknown';
-	const message = 'Detected user name: ' + username + '\n user_id: ' + result?.user_id + '\n Confidence: ' + result?.confidence;
-	display_message(message);
+
+	if(result?.error) {
+		display_message(result.error);
+		return;
+	} else {
+		const username = result?.user_name || 'unknown';
+		const message = 'Detected user name: ' + username + '\n user_id: ' + result?.user_id + '\n Confidence: ' + result?.confidence;
+		display_message(message);
+	}
 }
 
 async function check_uf2(event) {

@@ -159,13 +159,14 @@ def run_facial_recognizer():
 
 		confidence = fn.run_recognizer(recognizer_xml, video_file);
 
-		print(current_confidence);
-		print(confidence);
 		if(current_confidence < confidence):
 			current_confidence = confidence;
 			current_user_id = user_id;
 	
 
+	if(current_confidence < 50):
+		return jsonify({'error': 'Unable to detect user with a high degree of confidece. Please try again'});
+ 
 	user_name = fn.get_username(user_id);
 
 	return jsonify({
