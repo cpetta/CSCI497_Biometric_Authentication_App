@@ -8,7 +8,7 @@ import time;
 #Config Settings
 crop_pad = 20;
 db_name = 'csci497_biometric_auth_app.db'
-
+user_data_dir = 'user_data';
 
 @staticmethod
 def detect_faces(img):
@@ -33,10 +33,10 @@ def crop_face(img, face, pad):
 @staticmethod
 def convert_video_to_images(user_id):
 	path = f'user_{user_id}';
-	video_path = os.path.join(path, 'video');
-	image_path = os.path.join(path, 'images');
+	video_path = os.path.join(user_data_dir, path, 'video');
+	image_path = os.path.join(user_data_dir, path, 'images');
 
-	filename = os.path.join(video_path, f'{user_id}_video.webm');
+	filename = os.path.join(user_data_dir, video_path, f'{user_id}_video.webm');
 	video = cv.VideoCapture(filename);
 
 	if not os.path.exists(image_path):
@@ -59,13 +59,13 @@ def convert_video_to_images(user_id):
 			continue;
 
 		img_gray = crop_face(gray, faces[0], 0);
-		image_file = os.path.join(image_path, f'{i}.jpg');
+		image_file = os.path.join(user_data_dir, image_path, f'{i}.jpg');
 		cv.imwrite(image_file, img_gray);
 		i += 1;
 
 @staticmethod
 def train_recognizer(user_id):
-	path = os.path.join(f'user_{user_id}', 'images');
+	path = os.path.join(user_data_dir, f'user_{user_id}', 'images');
 	faces = [];
 	labels = [];
 
@@ -78,14 +78,14 @@ def train_recognizer(user_id):
 	for file in files:
 		i += 1;
 		print(f'Training with file {i}');
-		img_path = os.path.join(path, file);
+		img_path = os.path.join(user_data_dir, path, file);
 		img = cv.imread(img_path, cv.IMREAD_UNCHANGED);
 		faces.append(img);
 		labels.append(int(user_id));
 	
 	recognizer = cv.face.LBPHFaceRecognizer_create();
 	recognizer.train(faces, np.array(labels));
-	recognizer_xml_path = os.path.join(f'user_{user_id}', f'{user_id}_face_recognition_model.xml');
+	recognizer_xml_path = os.path.join(user_data_dir, f'user_{user_id}', f'{user_id}_face_recognition_model.xml');
 	recognizer.save(recognizer_xml_path);
 	return recognizer_xml_path;
 
@@ -176,8 +176,8 @@ def delete_db():
 	if('users' in db_list):
 		db_cursor.execute("DROP TABLE users");
 	
-	if('recognizors' in db_list):
-		db_cursor.execute("DROP TABLE recognizors");
+	if('recognizers' in db_list):
+		db_cursor.execute("DROP TABLE recognizers");
 
 	if('user_passkeys' in db_list):
 		db_cursor.execute("DROP TABLE user_passkeys");
@@ -336,7 +336,7 @@ def save_user_video(user_id, video):
 	if not os.path.exists(path):
 		os.makedirs(path);
 
-	filename = os.path.join(path, f'{user_id}_video.webm');
+	filename = os.path.join(user_data_dir, path, f'{user_id}_video.webm');
 	video.save(filename);
 
 	return filename;
